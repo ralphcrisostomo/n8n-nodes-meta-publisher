@@ -1,0 +1,63 @@
+{
+  "name": "n8n-nodes-meta-publisher",
+  "version": "0.1.0",
+  "description": "Publish to Instagram, Facebook Pages, and Threads (images, videos, reels, stories, carousels) via Meta Graph APIs.",
+  "keywords": [
+    "n8n-community-node-package",
+    "instagram",
+    "facebook",
+    "threads",
+    "meta",
+    "publisher"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ralphcrisostomo/n8n-nodes-meta-publisher",
+  "author": {
+    "name": "Ralf Crisostomo",
+    "email": "rrecrisostomo@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ralphcrisostomo/n8n-nodes-meta-publisher.git"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx rimraf dist && tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier src --write",
+    "lint": "eslint src package.json",
+    "lintfix": "eslint src package.json --fix",
+    "prepublishOnly": "npm run build && npm run lint"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/MetaGraphApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/MetaPublisher.node.js"
+    ]
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "rimraf": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@typescript-eslint/parser": "~8.32.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.3",
+    "gulp": "^5.0.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  }
+}
