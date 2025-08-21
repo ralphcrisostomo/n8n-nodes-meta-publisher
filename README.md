@@ -10,33 +10,33 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 
 ## Table of contents
 
-* [Features](#features)
-* [Supported platforms & operations](#supported-platforms--operations)
-* [Prerequisites](#prerequisites)
-* [Installation](#installation)
-* [Credentials](#credentials)
-* [Quick start (Fields mode)](#quick-start-fields-mode)
-* [JSON payload mode (optional)](#json-payload-mode-optional)
-* [Outputs](#outputs)
-* [Rate limits & retries](#rate-limits--retries)
-* [Development](#development)
-* [Testing locally](#testing-locally)
-* [Contributing](#contributing)
-* [License](#license)
+- [Features](#features)
+- [Supported platforms & operations](#supported-platforms--operations)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Credentials](#credentials)
+- [Quick start (Fields mode)](#quick-start-fields-mode)
+- [JSON payload mode (optional)](#json-payload-mode-optional)
+- [Outputs](#outputs)
+- [Rate limits & retries](#rate-limits--retries)
+- [Development](#development)
+- [Testing locally](#testing-locally)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
 ## Features
 
-* One node to publish across **Instagram / Facebook Pages / Threads**
-* **Create → poll → publish** workflow handled for you
-* **Reels, Stories, Carousels** (IG) + **Photos/Videos** (FB) + **Text/Image/Video/Carousel** (Threads)
-* Two input styles:
+- One node to publish across **Instagram / Facebook Pages / Threads**
+- **Create → poll → publish** workflow handled for you
+- **Reels, Stories, Carousels** (IG) + **Photos/Videos** (FB) + **Text/Image/Video/Carousel** (Threads)
+- Two input styles:
+  - **Fields mode** (simple UI fields)
+  - **JSON payload mode** for programmatic/batch posting
 
-    * **Fields mode** (simple UI fields)
-    * **JSON payload mode** for programmatic/batch posting
-* Consistent JSON output (status, IDs, permalinks-ready payloads)
-* Friendly polling with jitter; configurable timeouts
+- Consistent JSON output (status, IDs, permalinks-ready payloads)
+- Friendly polling with jitter; configurable timeouts
 
 ---
 
@@ -44,22 +44,22 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 
 **Instagram**
 
-* Publish Image, Publish Video (optional cover image)
-* Publish Reel (thumb offset, share to feed)
-* Publish Story (image/video)
-* Publish Carousel (2–10 items)
+- Publish Image, Publish Video (optional cover image)
+- Publish Reel (thumb offset, share to feed)
+- Publish Story (image/video)
+- Publish Carousel (2–10 items)
 
 **Facebook Pages**
 
-* Publish Photo
-* Publish Video (status polled until ready)
+- Publish Photo
+- Publish Video (status polled until ready)
 
 **Threads**
 
-* Publish Text
-* Publish Image (optional alt text)
-* Publish Video (optional alt text)
-* Publish Carousel (2–20 items)
+- Publish Text
+- Publish Image (optional alt text)
+- Publish Video (optional alt text)
+- Publish Carousel (2–20 items)
 
 ---
 
@@ -67,9 +67,9 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 
 You’ll need on your development machine:
 
-* **git**
-* **Node.js v20+** and npm
-* **n8n** installed globally
+- **git**
+- **Node.js v20+** and npm
+- **n8n** installed globally
 
 ```bash
 npm install n8n -g
@@ -83,7 +83,7 @@ For a smooth developer experience, see n8n’s guide on setting up the node deve
 
 ### Community Nodes (recommended for users)
 
-* Publish the package to npm, then install it from within n8n via *Community Nodes*.
+- Publish the package to npm, then install it from within n8n via _Community Nodes_.
 
 ### Local (developers)
 
@@ -111,20 +111,20 @@ The node will also attempt **OAuth2** if configured in your instance, then fall 
 
 1. Drag **Meta Publisher** into your workflow.
 2. Choose **Platform**:
+   - Instagram / Facebook Page / Threads
 
-    * Instagram / Facebook Page / Threads
-3. Choose **Operation** (e.g., *Publish Reel*).
+3. Choose **Operation** (e.g., _Publish Reel_).
 4. Fill required fields (e.g., IG User ID, Media URL, Caption).
 5. Optionally adjust **Polling Interval** and **Max Wait**.
 6. Run the workflow.
 
 **Example (IG → Publish Image)**
 
-* Platform: Instagram
-* Operation: Publish Image
-* IG User ID: `1789…`
-* Image URL: `https://…/photo.jpg`
-* Caption: `Hello from n8n 🚀`
+- Platform: Instagram
+- Operation: Publish Image
+- IG User ID: `1789…`
+- Image URL: `https://…/photo.jpg`
+- Caption: `Hello from n8n 🚀`
 
 ---
 
@@ -136,12 +136,12 @@ For advanced batching/programmatic posts, switch **Input Source** to **From JSON
 
 ```json
 {
-  "platform": "instagram",
-  "operation": "publishImage",
-  "igUserId": "1789...",
-  "mediaUrl": "https://example.com/image.jpg",
-  "caption": "Hello world",
-  "autoPublish": true
+	"platform": "instagram",
+	"operation": "publishImage",
+	"igUserId": "1789...",
+	"mediaUrl": "https://example.com/image.jpg",
+	"caption": "Hello world",
+	"autoPublish": true
 }
 ```
 
@@ -149,21 +149,21 @@ For advanced batching/programmatic posts, switch **Input Source** to **From JSON
 
 ```json
 {
-  "data": [
-    {
-      "platform": "threads",
-      "operation": "threadsPublishText",
-      "userId": "12345",
-      "text": "Posting from n8n 💚"
-    },
-    {
-      "platform": "facebook",
-      "operation": "publishFbPhoto",
-      "pageId": "999999",
-      "imageUrl": "https://example.com/photo.jpg",
-      "caption": "FB photo!"
-    }
-  ]
+	"data": [
+		{
+			"platform": "threads",
+			"operation": "threadsPublishText",
+			"userId": "12345",
+			"text": "Posting from n8n 💚"
+		},
+		{
+			"platform": "facebook",
+			"operation": "publishFbPhoto",
+			"pageId": "999999",
+			"imageUrl": "https://example.com/photo.jpg",
+			"caption": "FB photo!"
+		}
+	]
 }
 ```
 
@@ -177,14 +177,14 @@ Every successful publish returns a consistent JSON shape (fields may vary slight
 
 ```json
 {
-  "platform": "instagram|facebook|threads",
-  "type": "image|video|reel|story|carousel|text",
-  "creationId": "1789...",     // IG/Threads container or parent (when applicable)
-  "children": ["childId1"],    // for carousels
-  "status": "FINISHED|PUBLISHED|READY|ERROR|...",
-  "published": true,
-  "publishResult": { "id": "1790..." },  // media/thread object
-  "videoId": "1234567890"      // FB video id when relevant
+	"platform": "instagram|facebook|threads",
+	"type": "image|video|reel|story|carousel|text",
+	"creationId": "1789...", // IG/Threads container or parent (when applicable)
+	"children": ["childId1"], // for carousels
+	"status": "FINISHED|PUBLISHED|READY|ERROR|...",
+	"published": true,
+	"publishResult": { "id": "1790..." }, // media/thread object
+	"videoId": "1234567890" // FB video id when relevant
 }
 ```
 
@@ -194,9 +194,9 @@ Use this to chain downstream steps (e.g., fetch permalink, store IDs).
 
 ## Rate limits & retries
 
-* The node polls at your chosen interval with gentle jitter to be friendly to API limits.
-* Increase **Max Wait (sec)** for long videos/reels.
-* For high-volume workflows, consider spacing items or batching upstream.
+- The node polls at your chosen interval with gentle jitter to be friendly to API limits.
+- Increase **Max Wait (sec)** for long videos/reels.
+- For high-volume workflows, consider spacing items or batching upstream.
 
 ---
 
@@ -204,9 +204,9 @@ Use this to chain downstream steps (e.g., fetch permalink, store IDs).
 
 This repo uses the same conventions as the n8n node starter:
 
-* TypeScript build to `dist/`
-* ESLint + Prettier for quality
-* Starter-like scripts: `build`, `lint`, `lintfix`
+- TypeScript build to `dist/`
+- ESLint + Prettier for quality
+- Starter-like scripts: `build`, `lint`, `lintfix`
 
 Typical loop:
 
@@ -230,8 +230,8 @@ n8n documents how to **run your node locally**; follow those instructions to lin
 
 Issues and PRs are welcome! Please:
 
-* Lint before committing (`npm run lint` / `npm run lintfix`)
-* Keep code DRY: use shared client, poller, and platform adapters
+- Lint before committing (`npm run lint` / `npm run lintfix`)
+- Keep code DRY: use shared client, poller, and platform adapters
 
 ---
 
@@ -243,5 +243,5 @@ MIT — same as the official starter.&#x20;
 
 ### Notes
 
-* Ensure your Meta app has the appropriate permissions for your chosen platform(s) and that your IG account is a professional account linked to a Page when required.
-* Threads uses a separate host (`graph.threads.net`) under the Meta umbrella; this node handles it internally — you just choose **Threads** in the UI.
+- Ensure your Meta app has the appropriate permissions for your chosen platform(s) and that your IG account is a professional account linked to a Page when required.
+- Threads uses a separate host (`graph.threads.net`) under the Meta umbrella; this node handles it internally — you just choose **Threads** in the UI.
