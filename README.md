@@ -130,44 +130,205 @@ The node will also attempt **OAuth2** if configured in your instance, then fall 
 
 ## JSON payload mode (optional)
 
-For advanced batching/programmatic posts, switch **Input Source** to **From JSON Property** and point to a JSON object/array in the incoming item (e.g. `$json` or `data`). Each object must include at least `resource` and `operation`. Any missing field falls back to node UI defaults.
+Instead of filling parameters in the node UI, you can set **Input Source = JSON Property**.
+This allows you to feed one or more publishing jobs from the incoming item JSON.
 
-**Single job (from `$json`)**
+### 1. Configure the Node
+
+- Set **Input Source** → `From JSON Property`
+- Set **JSON Property Path** → the field in your input JSON where the job(s) are stored.
+  - Use `$json` to pass the entire input item.
+  - Use a path like `data.post` if your jobs are nested inside `{"data": { "post": {...}}}`.
+
+### 2. JSON Job Format
+
+Each job must be an object with at least:
+
+- `resource`: `"instagram" | "facebook" | "threads"`
+- `operation`: one of the supported operations
+- Required fields for that operation (see below)
+
+---
+
+#### **Common Fields**
+
+- `resource` – platform to publish to
+- `operation` – type of publish action
+- `pollSec` _(optional)_ – polling interval (default: `2`)
+- `maxWaitSec` _(optional)_ – max wait before timeout (default: `300`)
+
+---
+
+#### **Instagram**
+
+All Instagram jobs require:
+
+- `igUserId` – Instagram Business User ID
+- `autoPublish` _(default: true)_
+
+Operations:
+
+- `publishImage` → `mediaUrl`, `caption?`
+- `publishVideo` → `mediaUrl`, `caption?`, `coverUrl?`
+- `publishReel` → `videoUrl`, `caption?`, `thumbOffsetMs?`, `shareToFeed?`
+- `publishStory` → `mediaUrl`, `storyKind` (`"image"` | `"video"`), `caption?`
+- `publishCarousel` → `items[]` (`{ type: "image|video", url: "..." }`), `caption?`
+
+---
+
+#### **Facebook Page**
+
+All Facebook jobs require:
+
+- `pageId` – Page ID
+
+Operations:
+
+- `publishFbPhoto` → `imageUrl`, `caption?`
+- `publishFbVideo` → `videoUrl`, `title?`, `description?`
+
+---
+
+#### **Threads**
+
+All Threads jobs require:
+
+- `thUserId` (or `userId` alias) – Threads User ID
+
+Operations:
+
+- `threadsPublishText` → `text`
+- `threadsPublishImage` → `imageUrl`, `text?`, `altText?`
+- `threadsPublishVideo` → `videoUrl`, `text?`, `altText?`
+- `threadsPublishCarousel` → `items[]` (`{ type: "image|video", url: "...", altText? }`), `text?`
+
+You can also pass **an array of jobs** to publish multiple posts in one execution.
+
+### 3. Example: Multiple Jobs
+
+```json
+[
+	{
+		"resource": "instagram",
+		"operation": "publishStory",
+		"igUserId": "112233445566",
+		"mediaUrl": "https://example.com/video.mp4",
+		"caption": "Hello world",
+		"storyKind": "video",
+		"autoPublish": true
+	},
+	{
+		"resource": "instagram",
+		"operation": "publishStory",
+		"igUserId": "112233445566",
+		"mediaUrl": "https://example.com/story-image.jpg",
+		"caption": "Story (image)",
+		"storyKind": "image",
+		"autoPublish": true
+	},
+
+	{
+		"resource": "instagram",
+		"operation": "publishImage",
+		"igUserId": "112233445566",
+		"mediaUrl": "https://example.com/image.jpg",
+		"caption": "My IG image post",
+		"autoPublish": true
+	},
+	{
+		"resource": "instagram",
+		"operation": "publishVideo",
+		"igUserId": "112233445566",
+		"mediaUrl": "https://example.com/video.mp4",
+		"caption": "My IG video post",
+		"coverUrl": "https://example.com/cover.jpg",
+		"autoPublish": true
+	},
+	{
+		"resource": "instagram",
+		"operation": "publishReel",
+		"igUserId": "112233445566",
+		"videoUrl": "https://example.com/reel.mp4",
+		"caption": "My IG reel",
+		"thumbOffsetMs": 0,
+		"shareToFeed": true,
+		"autoPublish": true
+	},
+	{
+		"resource": "instagram",
+		"operation": "publishCarousel",
+		"igUserId": "112233445566",
+		"items": [
+			{ "type": "image", "url": "https://example.com/img1.jpg" },
+			{ "type": "video", "url": "https://example.com/vid1.mp4" }
+		],
+		"caption": "My carousel",
+		"autoPublish": true
+	},
+
+	{
+		"resource": "facebook",
+		"operation": "publishFbPhoto",
+		"pageId": "112233445566",
+		"imageUrl": "https://example.com/photo.jpg",
+		"caption": "FB photo caption"
+	},
+	{
+		"resource": "facebook",
+		"operation": "publishFbVideo",
+		"pageId": "112233445566",
+		"videoUrl": "https://example.com/video.mp4",
+		"title": "FB Video Title",
+		"description": "FB Video Description"
+	},
+
+	{
+		"resource": "threads",
+		"operation": "threadsPublishText",
+		"thUserId": "987654321",
+		"text": "This is a Threads text post"
+	},
+	{
+		"resource": "threads",
+		"operation": "threadsPublishImage",
+		"thUserId": "987654321",
+		"imageUrl": "https://example.com/thread-img.jpg",
+		"text": "Threads image caption",
+		"altText": "Alt text for accessibility"
+	},
+	{
+		"resource": "threads",
+		"operation": "threadsPublishVideo",
+		"thUserId": "987654321",
+		"videoUrl": "https://example.com/thread-video.mp4",
+		"text": "Threads video caption",
+		"altText": "Alt text for video"
+	},
+	{
+		"resource": "threads",
+		"operation": "threadsPublishCarousel",
+		"thUserId": "987654321",
+		"items": [
+			{ "type": "image", "url": "https://example.com/thread-img1.jpg", "altText": "Alt 1" },
+			{ "type": "video", "url": "https://example.com/thread-vid1.mp4", "altText": "Alt 2" }
+		],
+		"text": "Threads carousel caption"
+	}
+]
+```
+
+### 4. Example: Single Job
 
 ```json
 {
 	"resource": "instagram",
 	"operation": "publishImage",
-	"igUserId": "1789...",
+	"igUserId": "17841476543960845",
 	"mediaUrl": "https://example.com/image.jpg",
-	"caption": "Hello world",
+	"caption": "My first IG post",
 	"autoPublish": true
 }
 ```
-
-**Multiple jobs (from `$json.data`)**
-
-```json
-{
-	"data": [
-		{
-			"resource": "threads",
-			"operation": "threadsPublishText",
-			"userId": "12345",
-			"text": "Posting from n8n 💚"
-		},
-		{
-			"resource": "facebook",
-			"operation": "publishFbPhoto",
-			"pageId": "999999",
-			"imageUrl": "https://example.com/photo.jpg",
-			"caption": "FB photo!"
-		}
-	]
-}
-```
-
-Set **JSON Property Path** to `data` for the second example.
 
 ---
 
