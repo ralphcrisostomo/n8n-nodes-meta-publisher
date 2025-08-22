@@ -11,7 +11,7 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 ## Table of contents
 
 - [Features](#features)
-- [Supported platforms & operations](#supported-platforms--operations)
+- [Supported resources & operations](#supported-resources--operations)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Credentials](#credentials)
@@ -40,7 +40,7 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 
 ---
 
-## Supported platforms & operations
+## Supported resources & operations
 
 **Instagram**
 
@@ -110,7 +110,7 @@ The node will also attempt **OAuth2** if configured in your instance, then fall 
 ## Quick start (Fields mode)
 
 1. Drag **Meta Publisher** into your workflow.
-2. Choose **Platform**:
+2. Choose **Resource**:
    - Instagram / Facebook Page / Threads
 
 3. Choose **Operation** (e.g., _Publish Reel_).
@@ -120,7 +120,7 @@ The node will also attempt **OAuth2** if configured in your instance, then fall 
 
 **Example (IG → Publish Image)**
 
-- Platform: Instagram
+- Resource: Instagram
 - Operation: Publish Image
 - IG User ID: `1789…`
 - Image URL: `https://…/photo.jpg`
@@ -130,13 +130,13 @@ The node will also attempt **OAuth2** if configured in your instance, then fall 
 
 ## JSON payload mode (optional)
 
-For advanced batching/programmatic posts, switch **Input Source** to **From JSON Property** and point to a JSON object/array in the incoming item (e.g. `$json` or `data`). Each object must include at least `platform` and `operation`. Any missing field falls back to node UI defaults.
+For advanced batching/programmatic posts, switch **Input Source** to **From JSON Property** and point to a JSON object/array in the incoming item (e.g. `$json` or `data`). Each object must include at least `resource` and `operation`. Any missing field falls back to node UI defaults.
 
 **Single job (from `$json`)**
 
 ```json
 {
-	"platform": "instagram",
+	"resource": "instagram",
 	"operation": "publishImage",
 	"igUserId": "1789...",
 	"mediaUrl": "https://example.com/image.jpg",
@@ -151,13 +151,13 @@ For advanced batching/programmatic posts, switch **Input Source** to **From JSON
 {
 	"data": [
 		{
-			"platform": "threads",
+			"resource": "threads",
 			"operation": "threadsPublishText",
 			"userId": "12345",
 			"text": "Posting from n8n 💚"
 		},
 		{
-			"platform": "facebook",
+			"resource": "facebook",
 			"operation": "publishFbPhoto",
 			"pageId": "999999",
 			"imageUrl": "https://example.com/photo.jpg",
@@ -173,11 +173,11 @@ Set **JSON Property Path** to `data` for the second example.
 
 ## Outputs
 
-Every successful publish returns a consistent JSON shape (fields may vary slightly by platform/operation):
+Every successful publish returns a consistent JSON shape (fields may vary slightly by resource/operation):
 
 ```json
 {
-	"platform": "instagram|facebook|threads",
+	"resource": "instagram|facebook|threads",
 	"type": "image|video|reel|story|carousel|text",
 	"creationId": "1789...", // IG/Threads container or parent (when applicable)
 	"children": ["childId1"], // for carousels
@@ -231,7 +231,7 @@ n8n documents how to **run your node locally**; follow those instructions to lin
 Issues and PRs are welcome! Please:
 
 - Lint before committing (`npm run lint` / `npm run lintfix`)
-- Keep code DRY: use shared client, poller, and platform adapters
+- Keep code DRY: use shared client, poller, and resource adapters
 
 ---
 
@@ -243,5 +243,5 @@ MIT — same as the official starter.&#x20;
 
 ### Notes
 
-- Ensure your Meta app has the appropriate permissions for your chosen platform(s) and that your IG account is a professional account linked to a Page when required.
+- Ensure your Meta app has the appropriate permissions for your chosen resource(s) and that your IG account is a professional account linked to a Page when required.
 - Threads uses a separate host (`graph.threads.net`) under the Meta umbrella; this node handles it internally — you just choose **Threads** in the UI.
