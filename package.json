@@ -23,8 +23,7 @@
 	"engines": {
 		"node": ">=20.15"
 	},
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"main": "index.js",
 	"files": [
 		"dist"
 	],
@@ -43,7 +42,7 @@
 			"dist/credentials/MetaGraphApi.credentials.js"
 		],
 		"nodes": [
-			"dist/nodes/MetaGraphApi/MetaPublisher.node.js"
+			"dist/nodes/MetaPublisher/MetaPublisher.node.js"
 		]
 	},
 	"peerDependencies": {

@@ -1399,8 +1399,7 @@ export class MetaPublisher implements INodeType {
 						throw new Error(`Unsupported IG operation: ${operation}`);
 				}
 			} else if (platform === 'facebook') {
-
-			/* ================= FB ================= */
+				/* ================= FB ================= */
 				const pageId = this.getNodeParameter('pageId', i) as string;
 
 				switch (operation) {
@@ -1428,8 +1427,7 @@ export class MetaPublisher implements INodeType {
 						throw new Error(`Unsupported Facebook operation: ${operation}`);
 				}
 			} else if (platform === 'threads') {
-
-			/* ================= Threads ================= */
+				/* ================= Threads ================= */
 				const userId = this.getNodeParameter('thUserId', i) as string;
 
 				switch (operation) {
