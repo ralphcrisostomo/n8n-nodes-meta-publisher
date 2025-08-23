@@ -281,7 +281,6 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 		"title": "FB Video Title",
 		"description": "FB Video Description"
 	},
-
 	{
 		"resource": "threads",
 		"operation": "threadsPublishText",
@@ -309,8 +308,18 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 		"operation": "threadsPublishCarousel",
 		"thUserId": "987654321",
 		"items": [
-			{ "type": "image", "url": "https://example.com/thread-img1.jpg", "altText": "Alt 1", "caption": "Image Caption" },
-			{ "type": "video", "url": "https://example.com/thread-vid1.mp4", "altText": "Alt 2", "caption": "Video Caption" }
+			{
+				"type": "image",
+				"url": "https://example.com/thread-img1.jpg",
+				"altText": "Alt 1",
+				"caption": "Image Caption"
+			},
+			{
+				"type": "video",
+				"url": "https://example.com/thread-vid1.mp4",
+				"altText": "Alt 2",
+				"caption": "Video Caption"
+			}
 		],
 		"text": "Threads carousel caption"
 	}
@@ -323,7 +332,7 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 {
 	"resource": "instagram",
 	"operation": "publishImage",
-	"igUserId": "17841476543960845",
+	"igUserId": "112233445566",
 	"mediaUrl": "https://example.com/image.jpg",
 	"caption": "My first IG post",
 	"autoPublish": true

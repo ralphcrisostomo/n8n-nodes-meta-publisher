@@ -23,7 +23,6 @@ export type IgCreateArgs =
 
 export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: IgCreateArgs) {
 	const base = async (body: Record<string, any>) => {
-		console.log(JSON.stringify({ body }, null, 2));
 		const response = await apiRequest(
 			ctx,
 			'POST',
@@ -32,7 +31,6 @@ export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: Ig
 			body,
 			i,
 		);
-		console.log(JSON.stringify({ response }, null, 2));
 		return response;
 	};
 

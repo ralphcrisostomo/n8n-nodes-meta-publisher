@@ -18,19 +18,15 @@ export async function apiRequest(
 	const url = isAbsolute(endpoint) ? endpoint : `${GRAPH_BASE}${endpoint}`;
 	const options: any = { method, url, qs, body, json: true };
 
-	// Try OAuth2 first
-	// try {
-	// 	return await thisArg.helpers.requestWithAuthentication.call(thisArg, 'oAuth2Api', options);
-	// } catch (e: any) {
-	// 	if (!String(e?.message || '').includes('is not configured')) throw e;
-	// }
-
-	// Fallback to raw access token credential
 	try {
 		const cred: any = await (thisArg.getCredentials as any)('metaGraphApi');
 		if (cred?.accessToken) {
-			options.qs = { ...qs, access_token: cred.accessToken };
-			return await thisArg.helpers.request(options);
+			options.qs = { access_token: cred.accessToken, ...qs };
+			console.log('-------------------------');
+			console.log(JSON.stringify({ options }, null, 2));
+			const res = await thisArg.helpers.request(options);
+			console.log(JSON.stringify({ res }, null, 2));
+			return res;
 		}
 	} catch {
 		// no credential, keep going to plain request
