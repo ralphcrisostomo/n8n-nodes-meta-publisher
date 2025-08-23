@@ -98,3 +98,10 @@ export async function thGetStatus(ctx: IExecuteFunctions, containerId: string) {
 		fields: 'id,status,error_message',
 	}) as Promise<ThreadsStatus>;
 }
+
+export async function thGetPermalink(ctx: IExecuteFunctions, mediaId: string) {
+	const res = await tGet(ctx, `/${encodeURIComponent(mediaId)}/`, {
+		fields: 'permalink',
+	});
+	return res?.permalink;
+}

@@ -10,6 +10,7 @@ import {
 	thCreateCarouselParent,
 	thGetStatus,
 	thPublish,
+	thGetPermalink,
 } from './threads';
 
 export const OPS = {
@@ -314,6 +315,7 @@ export const OPS = {
 		});
 		const finished = ['FINISHED', 'PUBLISHED'].includes(st?.status ?? '');
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
+		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
 			platform: 'threads',
 			type: 'text',
@@ -321,6 +323,7 @@ export const OPS = {
 			status: st?.status,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 
@@ -351,6 +354,7 @@ export const OPS = {
 		});
 		const finished = ['FINISHED', 'PUBLISHED'].includes(st?.status ?? '');
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
+		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
 			platform: 'threads',
 			type: 'image',
@@ -358,6 +362,7 @@ export const OPS = {
 			status: st?.status,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 
@@ -388,6 +393,7 @@ export const OPS = {
 		});
 		const finished = ['FINISHED', 'PUBLISHED'].includes(st?.status ?? '');
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
+		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
 			platform: 'threads',
 			type: 'video',
@@ -395,6 +401,7 @@ export const OPS = {
 			status: st?.status,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 
@@ -431,11 +438,7 @@ export const OPS = {
 				intervalMs: a.pollSec * 1000,
 				maxMs: a.maxWaitSec * 1000,
 			});
-			const code = (st?.status ?? 'UNKNOWN') as
-				| 'IN_PROGRESS'
-				| 'FINISHED'
-				| 'ERROR'
-				| 'UNKNOWN';
+			const code = (st?.status ?? 'UNKNOWN') as 'IN_PROGRESS' | 'FINISHED' | 'ERROR' | 'UNKNOWN';
 			childStatuses[childId] = code;
 
 			if (code !== 'FINISHED') {
@@ -456,6 +459,7 @@ export const OPS = {
 		});
 		const finished = ['FINISHED', 'PUBLISHED'].includes(st?.status ?? '');
 		const pub = finished ? await thPublish(ctx, i, a.userId, parentId) : null;
+		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
 			platform: 'threads',
 			type: 'carousel',
@@ -465,6 +469,7 @@ export const OPS = {
 			status: st?.status,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 } as const;
