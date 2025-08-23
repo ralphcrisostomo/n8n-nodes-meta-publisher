@@ -259,8 +259,8 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 		"operation": "publishCarousel",
 		"igUserId": "112233445566",
 		"items": [
-			{ "type": "image", "url": "https://example.com/img1.jpg" },
-			{ "type": "video", "url": "https://example.com/vid1.mp4" }
+			{ "type": "image", "url": "https://example.com/img1.jpg", "caption": "Image Caption" },
+			{ "type": "video", "url": "https://example.com/vid1.mp4", "caption": "Video Caption" }
 		],
 		"caption": "My carousel",
 		"autoPublish": true
@@ -309,8 +309,8 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 		"operation": "threadsPublishCarousel",
 		"thUserId": "987654321",
 		"items": [
-			{ "type": "image", "url": "https://example.com/thread-img1.jpg", "altText": "Alt 1" },
-			{ "type": "video", "url": "https://example.com/thread-vid1.mp4", "altText": "Alt 2" }
+			{ "type": "image", "url": "https://example.com/thread-img1.jpg", "altText": "Alt 1", "caption": "Image Caption" },
+			{ "type": "video", "url": "https://example.com/thread-vid1.mp4", "altText": "Alt 2", "caption": "Video Caption" }
 		],
 		"text": "Threads carousel caption"
 	}

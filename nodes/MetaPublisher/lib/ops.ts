@@ -180,23 +180,52 @@ export const OPS = {
 		},
 	): Promise<PublishResult> {
 		if (a.items.length < 2 || a.items.length > 10) throw new Error('Carousel requires 2–10 items');
+		// 1) Create child containers
 		const childIds: string[] = [];
 		for (const it of a.items) {
 			const child = await igCreateContainer(
 				ctx,
 				i,
 				it.type === 'image'
-					? { kind: 'CAROUSEL_CHILD_IMAGE', igUserId: a.igUserId, url: it.url }
-					: { kind: 'CAROUSEL_CHILD_VIDEO', igUserId: a.igUserId, url: it.url },
+					? { kind: 'CAROUSEL_CHILD_IMAGE', igUserId: a.igUserId, url: it.url, caption: it.caption }
+					: {
+							kind: 'CAROUSEL_CHILD_VIDEO',
+							igUserId: a.igUserId,
+							url: it.url,
+							caption: it.caption,
+						},
 			);
 			childIds.push(child);
 		}
+		// 2) Wait for every child to be FINISHED (videos can take time)
+		const childStatuses: Record<string, 'IN_PROGRESS' | 'FINISHED' | 'ERROR' | 'UNKNOWN'> = {};
+		for (const childId of childIds) {
+			const st = await pollUntil({
+				check: () => igGetStatus.call(ctx, childId),
+				isDone: (r: any) => ['FINISHED', 'ERROR'].includes(r?.status_code ?? ''),
+				intervalMs: a.pollSec * 1000,
+				maxMs: a.maxWaitSec * 1000,
+			});
+			const code = (st?.status_code ?? 'UNKNOWN') as
+				| 'IN_PROGRESS'
+				| 'FINISHED'
+				| 'ERROR'
+				| 'UNKNOWN';
+			childStatuses[childId] = code;
+
+			if (code !== 'FINISHED') {
+				// Do NOT create the parent if any child failed/never finished
+				throw new Error(`Carousel child not ready: ${childId} status=${code}`);
+			}
+		}
+		// 3) Create parent container
 		const parentId = await igCreateContainer(ctx, i, {
 			kind: 'CAROUSEL_PARENT',
 			igUserId: a.igUserId,
 			children: childIds,
 			caption: a.caption,
 		});
+		// 4) Poll parent then (optionally) publish
 		const status = await pollUntil({
 			check: () => igGetStatus.call(ctx, parentId),
 			isDone: (r: any) => ['FINISHED', 'ERROR'].includes(r?.status_code ?? ''),
@@ -211,6 +240,7 @@ export const OPS = {
 			type: 'carousel',
 			creationId: parentId,
 			children: childIds,
+			childStatuses,
 			status: status?.status_code,
 			published: !!pub,
 			publishResult: pub,

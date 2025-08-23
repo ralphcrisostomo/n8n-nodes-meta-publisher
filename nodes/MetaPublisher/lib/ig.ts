@@ -18,12 +18,23 @@ export type IgCreateArgs =
 	| { kind: 'STORY_IMAGE'; igUserId: string; url: string; caption?: string }
 	| { kind: 'STORY_VIDEO'; igUserId: string; url: string; caption?: string }
 	| { kind: 'CAROUSEL_PARENT'; igUserId: string; children: string[]; caption?: string }
-	| { kind: 'CAROUSEL_CHILD_IMAGE'; igUserId: string; url: string }
-	| { kind: 'CAROUSEL_CHILD_VIDEO'; igUserId: string; url: string };
+	| { kind: 'CAROUSEL_CHILD_IMAGE'; igUserId: string; url: string; caption?: string }
+	| { kind: 'CAROUSEL_CHILD_VIDEO'; igUserId: string; url: string; caption?: string };
 
 export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: IgCreateArgs) {
-	const base = (body: Record<string, any>) =>
-		apiRequest(ctx, 'POST', `/${encodeURIComponent((a as any).igUserId)}/media`, {}, body, i);
+	const base = async (body: Record<string, any>) => {
+		console.log(JSON.stringify({ body }, null, 2));
+		const response = await apiRequest(
+			ctx,
+			'POST',
+			`/${encodeURIComponent((a as any).igUserId)}/media`,
+			{},
+			body,
+			i,
+		);
+		console.log(JSON.stringify({ response }, null, 2));
+		return response;
+	};
 
 	switch (a.kind) {
 		case 'IMAGE':
@@ -32,7 +43,7 @@ export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: Ig
 			return (
 				await base({
 					video_url: a.url,
-					media_type: 'VIDEO',
+					media_type: 'REELS',
 					caption: a.caption,
 					cover_url: a.coverUrl,
 				})
@@ -50,9 +61,16 @@ export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: Ig
 			return (await base({ video_url: a.url, caption: a.caption, media_type: 'STORIES' }))
 				?.id as string;
 		case 'CAROUSEL_CHILD_IMAGE':
-			return (await base({ image_url: a.url, is_carousel_item: true }))?.id as string;
+			return (await base({ image_url: a.url, caption: a.caption, is_carousel_item: true }))
+				?.id as string;
 		case 'CAROUSEL_CHILD_VIDEO':
-			return (await base({ video_url: a.url, is_carousel_item: true }))?.id as string;
+			return (
+				await base({
+					video_url: a.url,
+					media_type: 'REELS',
+					caption: a.caption,
+				})
+			)?.id as string;
 		case 'CAROUSEL_PARENT':
 			return (await base({ caption: a.caption, media_type: 'CAROUSEL', children: a.children }))
 				?.id as string;
