@@ -1,7 +1,7 @@
 import type { IExecuteFunctions } from 'n8n-workflow';
 import { apiRequest } from './client';
 
-const T_BASE = 'https://graph.threads.net';
+const T_BASE = 'https://graph.threads.net/v1.0';
 
 export type ThreadsStatus = {
 	status?: 'IN_PROGRESS' | 'FINISHED' | 'PUBLISHED' | 'ERROR' | 'EXPIRED';

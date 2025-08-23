@@ -422,6 +422,27 @@ export const OPS = {
 				}),
 			);
 		}
+		// 2) Wait for every child to be FINISHED (videos can take time)
+		const childStatuses: Record<string, 'IN_PROGRESS' | 'FINISHED' | 'ERROR' | 'UNKNOWN'> = {};
+		for (const childId of childIds) {
+			const st = await pollUntil({
+				check: () => thGetStatus(ctx, childId),
+				isDone: (r: any) => ['FINISHED', 'PUBLISHED', 'ERROR', 'EXPIRED'].includes(r?.status ?? ''),
+				intervalMs: a.pollSec * 1000,
+				maxMs: a.maxWaitSec * 1000,
+			});
+			const code = (st?.status ?? 'UNKNOWN') as
+				| 'IN_PROGRESS'
+				| 'FINISHED'
+				| 'ERROR'
+				| 'UNKNOWN';
+			childStatuses[childId] = code;
+
+			if (code !== 'FINISHED') {
+				// Do NOT create the parent if any child failed/never finished
+				throw new Error(`Carousel child not ready: ${childId} status=${code}`);
+			}
+		}
 		const parentId = await thCreateCarouselParent(ctx, i, {
 			userId: a.userId,
 			children: childIds,
@@ -440,6 +461,7 @@ export const OPS = {
 			type: 'carousel',
 			creationId: parentId,
 			children: childIds,
+			childStatuses,
 			status: st?.status,
 			published: !!pub,
 			publishResult: pub,
