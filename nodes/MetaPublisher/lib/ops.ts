@@ -296,7 +296,14 @@ export const OPS = {
 			publishResult && publishResult.post_id
 				? await fbGetPostPermalink(ctx, publishResult.post_id, pageAccessToken)
 				: null;
-		return { platform: 'facebook', type: 'image', publishResult, published: true, permalink };
+		return {
+			id: 'facebook-image',
+			platform: 'facebook',
+			type: 'image',
+			publishResult,
+			published: true,
+			permalink,
+		};
 	},
 
 	async publishFbVideo(

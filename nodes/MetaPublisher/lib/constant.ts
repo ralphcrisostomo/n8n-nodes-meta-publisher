@@ -21,5 +21,4 @@ export const EXAMPLE_DESCRIPTION = 'This is an example description.';
 export const EXAMPLE_VIDEO_URL = 'https://www.example.com/video.mp4';
 export const EXAMPLE_IMAGE_URL = 'https://www.example.com/image.jpg';
 export const EXAMPLE_TITLE = 'This is an example title.';
-export const EXAMPLE_DESCRIPTION = 'This is an example description.';
 export const EXAMPLE_ALT_TEXT = 'This is an example alt text.';
