@@ -188,8 +188,8 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 		"resource": "instagram",
 		"operation": "publishStory",
 		"igUserId": "112233445566",
-		"mediaUrl": "https://example.com/video.mp4",
-		"caption": "Hello world",
+		"mediaUrl": "https://www.example.com/video.mp4",
+		"caption": "This is an example caption.",
 		"storyKind": "video",
 		"autoPublish": true
 	},
@@ -197,35 +197,34 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 		"resource": "instagram",
 		"operation": "publishStory",
 		"igUserId": "112233445566",
-		"mediaUrl": "https://example.com/story-image.jpg",
-		"caption": "Story (image)",
+		"mediaUrl": "https://www.example.com/image.jpg",
+		"caption": "This is an example caption.",
 		"storyKind": "image",
 		"autoPublish": true
 	},
-
 	{
 		"resource": "instagram",
 		"operation": "publishImage",
 		"igUserId": "112233445566",
-		"mediaUrl": "https://example.com/image.jpg",
-		"caption": "My IG image post",
+		"mediaUrl": "https://www.example.com/image.jpg",
+		"caption": "This is an example caption.",
 		"autoPublish": true
 	},
 	{
 		"resource": "instagram",
 		"operation": "publishVideo",
 		"igUserId": "112233445566",
-		"mediaUrl": "https://example.com/video.mp4",
-		"caption": "My IG video post",
-		"coverUrl": "https://example.com/cover.jpg",
+		"mediaUrl": "https://www.example.com/video.mp4",
+		"caption": "This is an example caption.",
+		"coverUrl": "https://www.example.com/image.jpg",
 		"autoPublish": true
 	},
 	{
 		"resource": "instagram",
 		"operation": "publishReel",
 		"igUserId": "112233445566",
-		"videoUrl": "https://example.com/reel.mp4",
-		"caption": "My IG reel",
+		"videoUrl": "https://www.example.com/video.mp4",
+		"caption": "This is an example caption.",
 		"thumbOffsetMs": 0,
 		"shareToFeed": true,
 		"autoPublish": true
@@ -237,74 +236,93 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 		"items": [
 			{
 				"type": "image",
-				"url": "https://example.com/img1.jpg",
-				"caption": "Image Caption"
+				"url": "https://www.example.com/image.jpg",
+				"caption": "This is an example caption."
 			},
 			{
 				"type": "video",
-				"url": "https://example.com/vid1.mp4",
-				"caption": "Video Caption"
+				"url": "https://www.example.com/video.mp4",
+				"caption": "This is an example caption."
 			}
 		],
-		"caption": "My carousel",
+		"caption": "This is an example caption.",
 		"autoPublish": true
 	},
 	{
 		"resource": "facebook",
 		"operation": "publishFbPhoto",
 		"pageId": "112233445566",
-		"imageUrl": "https://example.com/photo.jpg",
-		"caption": "FB photo caption"
+		"imageUrl": "https://www.example.com/image.jpg",
+		"caption": "This is an example caption."
 	},
 	{
 		"resource": "facebook",
 		"operation": "publishFbVideo",
 		"pageId": "112233445566",
-		"videoUrl": "https://example.com/video.mp4",
-		"title": "FB Video Title",
-		"description": "FB Video Description"
+		"videoUrl": "https://www.example.com/video.mp4",
+		"title": "This is an example title.",
+		"description": "This is an example description."
+	},
+	{
+		"resource": "facebook",
+		"operation": "publishFbStoryPhoto",
+		"pageId": "112233445566",
+		"imageUrl": "https://www.example.com/image.jpg"
+	},
+	{
+		"resource": "facebook",
+		"operation": "publishFbStoryVideo",
+		"pageId": "112233445566",
+		"videoUrl": "https://www.example.com/video.mp4"
+	},
+	{
+		"resource": "facebook",
+		"operation": "publishFbReel",
+		"pageId": "112233445566",
+		"videoUrl": "https://www.example.com/video.mp4",
+		"description": "FB Reel Description"
 	},
 	{
 		"resource": "threads",
 		"operation": "threadsPublishText",
-		"thUserId": "987654321",
-		"text": "This is a Threads text post"
+		"thUserId": "112233445566",
+		"text": "This is an example text."
 	},
 	{
 		"resource": "threads",
 		"operation": "threadsPublishImage",
-		"thUserId": "987654321",
-		"imageUrl": "https://example.com/thread-img.jpg",
-		"text": "Threads image caption",
-		"altText": "Alt text for accessibility"
+		"thUserId": "112233445566",
+		"imageUrl": "https://www.example.com/image.jpg",
+		"text": "This is an example caption.",
+		"altText": "This is an example alt text."
 	},
 	{
 		"resource": "threads",
 		"operation": "threadsPublishVideo",
-		"thUserId": "987654321",
-		"videoUrl": "https://example.com/thread-video.mp4",
-		"text": "Threads video caption",
-		"altText": "Alt text for video"
+		"thUserId": "112233445566",
+		"videoUrl": "https://www.example.com/video.mp4",
+		"text": "This is an example caption.",
+		"altText": "This is an example alt text."
 	},
 	{
 		"resource": "threads",
 		"operation": "threadsPublishCarousel",
-		"thUserId": "987654321",
+		"thUserId": "112233445566",
 		"items": [
 			{
 				"type": "image",
-				"url": "https://example.com/thread-img1.jpg",
-				"altText": "Alt 1",
-				"caption": "Image Caption"
+				"url": "https://www.example.com/image.jpg",
+				"altText": "This is an example alt text.",
+				"caption": "This is an example caption."
 			},
 			{
 				"type": "video",
-				"url": "https://example.com/thread-vid1.mp4",
-				"altText": "Alt 2",
-				"caption": "Video Caption"
+				"url": "https://www.example.com/video.mp4",
+				"altText": "This is an example alt text.",
+				"caption": "This is an example caption."
 			}
 		],
-		"text": "Threads carousel caption"
+		"text": "This is an example caption."
 	}
 ]
 ```
