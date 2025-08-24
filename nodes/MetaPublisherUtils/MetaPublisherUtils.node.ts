@@ -174,8 +174,10 @@ export class MetaPublisherUtils implements INodeType {
 				default: [],
 				options: [
 					{ name: 'Publish Photo', value: 'publishFbPhoto' },
-					{ name: 'Publish Video', value: 'publishFbVideo' },
 					{ name: 'Publish Reel', value: 'publishFbReel' },
+					{ name: 'Publish Story Photo', value: 'publishFbStoryPhoto' },
+					{ name: 'Publish Story Video', value: 'publishFbStoryVideo' },
+					{ name: 'Publish Video', value: 'publishFbVideo' },
 				],
 				displayOptions: { show: { resources: ['facebook'] } },
 			},
@@ -484,6 +486,32 @@ export class MetaPublisherUtils implements INodeType {
 						},
 						true,
 						'FB: pageId is required for publishFbVideo',
+					);
+				}
+
+				if (fbOps.includes('publishFbStoryPhoto') && (imageUrl || includeExamples)) {
+					push(
+						{
+							resource: 'facebook',
+							operation: 'publishFbStoryPhoto',
+							pageId,
+							imageUrl: imageUrl || 'https://example.com/photo.jpg',
+						},
+						true,
+						'FB: pageId is required for publishFbStoryPhoto',
+					);
+				}
+
+				if (fbOps.includes('publishFbStoryVideo') && (videoUrl || includeExamples)) {
+					push(
+						{
+							resource: 'facebook',
+							operation: 'publishFbStoryVideo',
+							pageId,
+							videoUrl: videoUrl || 'https://example.com/video.mp4',
+						},
+						true,
+						'FB: pageId is required for publishFbStoryVideo',
 					);
 				}
 

@@ -113,14 +113,24 @@ export class MetaPublisher implements INodeType {
 						action: 'Publish photo photo facebook page',
 					},
 					{
-						name: 'Publish Video (FB Page)',
-						value: 'publishFbVideo',
-						action: 'Publish video on facebook page',
-					},
-					{
 						name: 'Publish Reel (FB Page)',
 						value: 'publishFbReel',
 						action: 'Publish reel on facebook page',
+					},
+					{
+						name: 'Publish Story Photo (FB Page)',
+						value: 'publishFbStoryPhoto',
+						action: 'Publish a photo story',
+					},
+					{
+						name: 'Publish Story Video (FB Page)',
+						value: 'publishFbStoryVideo',
+						action: 'Publish a video story',
+					},
+					{
+						name: 'Publish Video (FB Page)',
+						value: 'publishFbVideo',
+						action: 'Publish video on facebook page',
 					},
 				],
 				displayOptions: { show: { inputSource: ['fields'], resource: ['facebook'] } },
@@ -381,7 +391,11 @@ export class MetaPublisher implements INodeType {
 				default: '',
 				required: true,
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['facebook'], operation: ['publishFbPhoto'] },
+					show: {
+						inputSource: ['fields'],
+						resource: ['facebook'],
+						operation: ['publishFbPhoto', 'publishFbStoryPhoto'],
+					},
 				},
 			},
 			{
@@ -405,7 +419,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['facebook'],
-						operation: ['publishFbVideo', 'publishFbReel'],
+						operation: ['publishFbVideo', 'publishFbStoryVideo', 'publishFbReel'],
 					},
 				},
 			},
@@ -722,6 +736,19 @@ export class MetaPublisher implements INodeType {
 								videoUrl,
 								title,
 								description,
+								pollSec,
+								maxWaitSec,
+							});
+						}
+						case 'publishFbStoryPhoto': {
+							const imageUrl = job.imageUrl ?? (this.getNodeParameter('imageUrl', i) as string);
+							return OPS.publishFbStoryPhoto(this, i, { pageId, imageUrl });
+						}
+						case 'publishFbStoryVideo': {
+							const videoUrl = job.videoUrl ?? (this.getNodeParameter('videoUrl', i) as string);
+							return OPS.publishStoryFbVideo(this, i, {
+								pageId,
+								videoUrl,
 								pollSec,
 								maxWaitSec,
 							});

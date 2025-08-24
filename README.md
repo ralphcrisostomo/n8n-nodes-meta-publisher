@@ -55,7 +55,7 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 - Publish Photo
 - Publish Video (status polled until ready)
 - Publish Reel (status polled until ready)
-- ~~Publish Story~~ (work in progress)
+- Publish Story (image/video)
 
 **Threads**
 
