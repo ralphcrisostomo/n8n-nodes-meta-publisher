@@ -14,6 +14,7 @@ export type CarouselItem = {
 };
 
 export type PublishResult = {
+	id: string;
 	platform: Platform;
 	type: 'image' | 'video' | 'reel' | 'story' | 'carousel' | 'text';
 	creationId?: string; // IG/Threads container or parent

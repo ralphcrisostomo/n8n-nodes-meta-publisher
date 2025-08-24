@@ -56,6 +56,7 @@ export const OPS = {
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
+			id: 'instagram-image',
 			platform: 'instagram',
 			type: 'image',
 			creationId: id,
@@ -96,6 +97,7 @@ export const OPS = {
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
+			id: 'instagram-video',
 			platform: 'instagram',
 			type: 'video',
 			creationId: id,
@@ -138,6 +140,7 @@ export const OPS = {
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
+			id: 'instagram-reel',
 			platform: 'instagram',
 			type: 'reel',
 			creationId: id,
@@ -178,6 +181,7 @@ export const OPS = {
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
+			id: `instagram-story-${a.kind}`,
 			platform: 'instagram',
 			type: 'story',
 			creationId: id,
@@ -258,6 +262,7 @@ export const OPS = {
 			a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, parentId) : null;
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
+			id: 'instagram-carousel',
 			platform: 'instagram',
 			type: 'carousel',
 			creationId: parentId,
@@ -327,6 +332,7 @@ export const OPS = {
 		});
 		const permalink = videoId ? await fbGetPermalink(ctx, videoId, pageAccessToken) : null;
 		return {
+			id: 'facebook-video',
 			platform: 'facebook',
 			type: 'video',
 			videoId,
@@ -363,6 +369,7 @@ export const OPS = {
 				? await fbGetPostPermalink(ctx, publishResult.post_id, pageAccessToken)
 				: null;
 		return {
+			id: 'facebook-story-photo', // TODO: Decide if we want to use 'photo' or 'image'
 			platform: 'facebook',
 			type: 'story',
 			published: true,
@@ -409,6 +416,7 @@ export const OPS = {
 				? await fbGetPostPermalink(ctx, publishResult.post_id, pageAccessToken)
 				: null;
 		return {
+			id: 'facebook-story-video',
 			platform: 'facebook',
 			type: 'story',
 			videoId,
@@ -458,6 +466,7 @@ export const OPS = {
 		const permalink = await fbGetPermalink(ctx, videoId, pageAccessToken);
 
 		return {
+			id: 'facebook-reel',
 			platform: 'facebook',
 			type: 'reel',
 			videoId,
@@ -486,6 +495,7 @@ export const OPS = {
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
 		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
+			id: `threads-text`,
 			platform: 'threads',
 			type: 'text',
 			creationId: id,
@@ -525,6 +535,7 @@ export const OPS = {
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
 		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
+			id: `threads-image`,
 			platform: 'threads',
 			type: 'image',
 			creationId: id,
@@ -564,6 +575,7 @@ export const OPS = {
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
 		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
+			id: `threads-video`,
 			platform: 'threads',
 			type: 'video',
 			creationId: id,
@@ -630,6 +642,7 @@ export const OPS = {
 		const pub = finished ? await thPublish(ctx, i, a.userId, parentId) : null;
 		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
+			id: `threads-carousel`,
 			platform: 'threads',
 			type: 'carousel',
 			creationId: parentId,
