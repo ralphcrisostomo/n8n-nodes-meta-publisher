@@ -23,10 +23,12 @@ export async function apiRequest(
 		if (cred?.accessToken) {
 			options.qs = { access_token: cred.accessToken, ...qs };
 			// Note: Enable this to debug the request!
-			// console.log('-------------------------');
-			// console.log(JSON.stringify({ options }, null, 2));
-			// console.log(JSON.stringify({ res }, null, 2));
-			return await thisArg.helpers.request(options);
+			console.log('-------------------------');
+			console.log(JSON.stringify({ options }, null, 2));
+
+			const res = await thisArg.helpers.request(options);
+			console.log(JSON.stringify({ res }, null, 2));
+			return res;
 		}
 	} catch {
 		// no credential, keep going to plain request

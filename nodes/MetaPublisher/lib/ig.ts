@@ -86,7 +86,7 @@ export function igGetStatus(this: IExecuteFunctions, creationId: string) {
 }
 
 export async function igGetPermalink(this: IExecuteFunctions, mediaId: string) {
-	const res = apiRequest(
+	const res = await apiRequest(
 		this,
 		'GET',
 		`/${encodeURIComponent(mediaId)}`,

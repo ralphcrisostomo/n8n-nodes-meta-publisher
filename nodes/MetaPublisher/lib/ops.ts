@@ -3,7 +3,7 @@ import { pollUntil } from './poll';
 import type { PublishResult, CarouselItem } from './types';
 
 import { igCreateContainer, igGetStatus, igPublish, igGetPermalink } from './ig';
-import { fbPublishPhoto, fbCreateVideo, fbGetVideoStatus } from './fb';
+import { fbPublishPhoto, fbCreateVideo, fbGetVideoStatus, fbGetPermalink } from './fb';
 import {
 	thCreateContainer,
 	thCreateCarouselItem,
@@ -270,7 +270,8 @@ export const OPS = {
 			mediaUrl: a.imageUrl,
 			caption: a.caption,
 		});
-		return { platform: 'facebook', type: 'image', result: res, published: true };
+		const permalink = res && res.post_id ? await fbGetPermalink(ctx, res.post_id) : null;
+		return { platform: 'facebook', type: 'image', result: res, published: true, permalink };
 	},
 
 	async publishFbVideo(
@@ -300,12 +301,14 @@ export const OPS = {
 			intervalMs: a.pollSec * 1000,
 			maxMs: a.maxWaitSec * 1000,
 		});
+		const permalink = videoId ? await fbGetPermalink(ctx, videoId) : null;
 		return {
 			platform: 'facebook',
 			type: 'video',
 			videoId,
 			status: status?.status?.video_status,
 			published: true,
+			permalink,
 		};
 	},
 

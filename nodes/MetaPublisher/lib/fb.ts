@@ -68,3 +68,16 @@ export async function fbGetVideoStatus(
 ): Promise<FbVideoStatus> {
 	return apiRequest(ctx, 'GET', `/${encodeURIComponent(videoId)}`, { fields: 'status' }, {});
 }
+
+export async function fbGetPermalink(ctx: IExecuteFunctions, mediaId: string) {
+	const res = await apiRequest(
+		ctx,
+		'GET',
+		`/${encodeURIComponent(mediaId)}`,
+		{ fields: 'permalink_url' },
+		{},
+	);
+	if (!res?.id) throw new Error('FB get permalink failed: ' + JSON.stringify(res));
+	const permalink = res?.permalink_url;
+	return permalink.startsWith('/') ? `https://www.facebook.com${permalink}` : permalink;
+}
