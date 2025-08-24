@@ -241,12 +241,17 @@ export async function fbGetVideoStatus(
 	videoId: string,
 	pageAccessToken: any,
 ): Promise<FbVideoStatus> {
-	return apiRequest(
-		ctx,
-		'GET',
-		`/${encodeURIComponent(videoId)}`,
-		{ fields: 'status', access_token: pageAccessToken?.access_token },
-		{},
+	return retry(
+		async () => {
+			return apiRequest(
+				ctx,
+				'GET',
+				`/${encodeURIComponent(videoId)}`,
+				{ fields: 'status', access_token: pageAccessToken?.access_token },
+				{},
+			);
+		},
+		{ tries: 20, delayMs: 2000 },
 	);
 }
 
@@ -255,14 +260,18 @@ export async function fbGetPermalink(
 	mediaId: string,
 	pageAccessToken: any,
 ) {
-	const res = await apiRequest(
-		ctx,
-		'GET',
-		`/${encodeURIComponent(mediaId)}`,
-		{ fields: 'permalink_url', access_token: pageAccessToken?.access_token },
-		{},
+	return retry(
+		async () => {
+			const res = await apiRequest(
+				ctx,
+				'GET',
+				`/${encodeURIComponent(mediaId)}`,
+				{ fields: 'permalink_url', access_token: pageAccessToken?.access_token },
+				{},
+			);
+			const permalink = res?.permalink_url;
+			return permalink.startsWith('/') ? `https://www.facebook.com${permalink}` : permalink;
+		},
+		{ tries: 20, delayMs: 2000 },
 	);
-	if (!res?.id) throw new Error('FB get permalink failed: ' + JSON.stringify(res));
-	const permalink = res?.permalink_url;
-	return permalink.startsWith('/') ? `https://www.facebook.com${permalink}` : permalink;
 }

@@ -454,10 +454,9 @@ export const OPS = {
 			videoId: videoId,
 			description: a.description,
 		});
-		const permalink =
-			publishResult && publishResult.post_id
-				? await fbGetPermalink(ctx, publishResult.post_id, pageAccessToken)
-				: null;
+		// Note: We use videoId instead of publishResult.post_id to get permalink
+		const permalink = await fbGetPermalink(ctx, videoId, pageAccessToken);
+
 		return {
 			platform: 'facebook',
 			type: 'reel',
