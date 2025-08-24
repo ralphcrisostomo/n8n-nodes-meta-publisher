@@ -2,7 +2,7 @@ import type { IExecuteFunctions } from 'n8n-workflow';
 import { pollUntil } from './poll';
 import type { PublishResult, CarouselItem } from './types';
 
-import { igCreateContainer, igGetStatus, igPublish } from './ig';
+import { igCreateContainer, igGetStatus, igPublish, igGetPermalink } from './ig';
 import { fbPublishPhoto, fbCreateVideo, fbGetVideoStatus } from './fb';
 import {
 	thCreateContainer,
@@ -42,6 +42,7 @@ export const OPS = {
 		});
 		const finished = status?.status_code === 'FINISHED';
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			platform: 'instagram',
 			type: 'image',
@@ -49,6 +50,7 @@ export const OPS = {
 			status: status?.status_code,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 
@@ -80,6 +82,7 @@ export const OPS = {
 		});
 		const finished = status?.status_code === 'FINISHED';
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			platform: 'instagram',
 			type: 'video',
@@ -87,6 +90,7 @@ export const OPS = {
 			status: status?.status_code,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 
@@ -120,6 +124,7 @@ export const OPS = {
 		});
 		const finished = status?.status_code === 'FINISHED';
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			platform: 'instagram',
 			type: 'reel',
@@ -127,6 +132,7 @@ export const OPS = {
 			status: status?.status_code,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 
@@ -158,6 +164,7 @@ export const OPS = {
 		});
 		const finished = status?.status_code === 'FINISHED';
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			platform: 'instagram',
 			type: 'story',
@@ -165,6 +172,7 @@ export const OPS = {
 			status: status?.status_code,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 
@@ -236,6 +244,7 @@ export const OPS = {
 		const finished = status?.status_code === 'FINISHED';
 		const pub =
 			a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, parentId) : null;
+		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			platform: 'instagram',
 			type: 'carousel',
@@ -245,6 +254,7 @@ export const OPS = {
 			status: status?.status_code,
 			published: !!pub,
 			publishResult: pub,
+			permalink,
 		};
 	},
 
