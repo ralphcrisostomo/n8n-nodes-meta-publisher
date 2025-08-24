@@ -2,6 +2,8 @@
 
 # n8n-nodes-meta-publisher
 
+![Meta Publisher workflow](docs/images/workflow.png)
+
 Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — including **Images, Videos, Reels, Stories, and Carousels** — with a single, DRY node.
 
 > Built from the official **n8n community node starter** structure so you can develop, lint, and ship confidently.&#x20;
@@ -369,6 +371,206 @@ Use this to chain downstream steps (e.g., fetch permalink, store IDs).
 - For high-volume workflows, consider spacing items or batching upstream.
 
 ---
+
+## Meta Publisher Utils — how to use
+
+The **Meta Publisher Utils** node generates a ready-to-run JSON payload for the **Meta Publisher** node. It’s perfect for assembling multiple posts (IG/FB/Threads) from a single set of inputs, templates, or upstream data.
+
+---
+
+### What it does
+
+- You select:
+  - **Resources** (Instagram, Facebook Page, Threads)
+  - **Operations** per resource (checkboxes; only relevant options appear)
+
+- You provide common inputs (e.g., `imageUrl`, `videoUrl`, `caption`, IDs)
+- The node outputs **one item** whose `json.data` is an **array of jobs** ready for the Meta Publisher node’s **JSON input** mode.
+
+---
+
+### Basic wiring
+
+1. **Meta Publisher Utils** → **Meta Publisher**
+
+- In **Meta Publisher**:
+  - Set **Input Source** = `From JSON Property`
+  - Set **JSON Property Path** = `data`
+
+That’s it—Meta Publisher will execute each generated job in the array.
+
+---
+
+### Quick start (example)
+
+1. Drop **Meta Publisher Utils**.
+2. In **Resources**, tick **Instagram** and **Threads**.
+3. In **Instagram Operations**, tick **Publish Image** and **Publish Reel**.
+4. Fill:
+   - **IG User ID**: `1789…`
+   - **Image URL**: `https://example.com/image.jpg`
+   - **Video URL**: `https://example.com/reel.mp4`
+   - **Caption**: `Hello from n8n`
+
+5. In **Threads Operations**, tick **Publish Text**:
+   - **Threads User ID**: `9876…`
+   - **Threads Text**: `Posting from n8n 💚`
+
+6. (Optional) Leave **Skip Missing** enabled to silently skip incomplete jobs.
+7. Connect to **Meta Publisher** (JSON mode as above) and run.
+
+The Utils node will output something like:
+
+```json
+{
+	"data": [
+		{
+			"resource": "instagram",
+			"operation": "publishImage",
+			"igUserId": "1789...",
+			"mediaUrl": "https://example.com/image.jpg",
+			"caption": "Hello from n8n",
+			"autoPublish": true
+		},
+		{
+			"resource": "instagram",
+			"operation": "publishReel",
+			"igUserId": "1789...",
+			"videoUrl": "https://example.com/reel.mp4",
+			"caption": "Hello from n8n",
+			"thumbOffsetMs": 0,
+			"shareToFeed": true,
+			"autoPublish": true
+		},
+		{
+			"resource": "threads",
+			"operation": "threadsPublishText",
+			"thUserId": "9876...",
+			"text": "Posting from n8n 💚"
+		}
+	],
+	"count": 3
+}
+```
+
+---
+
+### Editable fields (high level)
+
+- **Resources** (multi-select):
+  - Instagram / Facebook Page / Threads
+
+- **Operations** (checkboxes shown only when the resource is selected):
+  - **Instagram:** `publishStory`, `publishImage`, `publishVideo`, `publishReel`, `publishCarousel`
+  - **Facebook Page:** `publishFbPhoto`, `publishFbVideo`
+  - **Threads:** `threadsPublishText`, `threadsPublishImage`, `threadsPublishVideo`, `threadsPublishCarousel`
+
+- **Common inputs:** `imageUrl`, `videoUrl`, `caption`
+- **Per-resource IDs:** `igUserId`, `pageId`, `thUserId`
+- **Extras:**
+  - IG: `coverUrl` (video), `reelVideoUrl`, `thumbOffsetMs`, `shareToFeed`, `igItems` (carousel)
+  - IG Story: `storyImageUrl`, `storyVideoUrl` (if omitted, falls back to common URLs)
+  - Threads: `text`, `altText`, `thItems` (carousel: image/video entries with `altText`, optional `caption`)
+
+- **Behavior toggles:**
+  - **Skip Missing:** Whether to skip incomplete jobs instead of throwing errors.
+  - **Include Example Set:** Whether to include example URLs/IDs when you don’t have real ones yet (for demos).
+
+> Tip: When building carousels, supply at least **2 items**; the Utils node will warn/skip otherwise (depending on **Skip Missing**).
+
+---
+
+### Feeding dynamic data
+
+Upstream nodes (e.g., **Set**, **Spreadsheet File**, **HTTP Request**) can provide per-item fields like `igUserId`, `imageUrl`, etc. Use n8n expressions in the Utils node (e.g., `={{$json.imageUrl}}`) to populate the payload dynamically.
+
+- To create **many jobs** from a single record, fill the common fields and tick multiple operations/resources.
+- To create **one job per record**, feed the Utils node multiple items (one per row/record). It outputs one payload per input item.
+
+---
+
+### Minimal recipes
+
+**Instagram → Image**
+
+```json
+{
+	"resource": "instagram",
+	"operation": "publishImage",
+	"igUserId": "1789...",
+	"mediaUrl": "https://example.com/photo.jpg",
+	"caption": "My IG post",
+	"autoPublish": true
+}
+```
+
+**Instagram → Story (video)**
+
+```json
+{
+	"resource": "instagram",
+	"operation": "publishStory",
+	"igUserId": "1789...",
+	"mediaUrl": "https://example.com/story.mp4",
+	"caption": "Story time",
+	"storyKind": "video",
+	"autoPublish": true
+}
+```
+
+**Facebook Page → Photo**
+
+```json
+{
+	"resource": "facebook",
+	"operation": "publishFbPhoto",
+	"pageId": "112233445566",
+	"imageUrl": "https://example.com/photo.jpg",
+	"caption": "FB photo caption"
+}
+```
+
+**Threads → Image**
+
+```json
+{
+	"resource": "threads",
+	"operation": "threadsPublishImage",
+	"thUserId": "987654321",
+	"imageUrl": "https://example.com/thread.jpg",
+	"text": "Threads image caption",
+	"altText": "Alt text for accessibility"
+}
+```
+
+---
+
+### Common pitfalls & tips
+
+- **IDs are required** per platform:
+  - Instagram → `igUserId`
+  - Facebook Page → `pageId`
+  - Threads → `thUserId`
+
+- **Skip Missing** is your friend during setup—flip it off for stricter validation later.
+- **Carousels:** provide 2–10 items (IG) or 2–20 (Threads). The Publisher node will also **poll children first** for IG.
+- **Meta Publisher node:** in JSON mode it expects `platform` internally, but we accept `resource` and normalize it—your Utils output uses `resource` as shown here (works with our Publisher).
+- **Permalinks/insights:** use a downstream HTTP Request or an enhanced Publisher to fetch them after publish.
+
+---
+
+### Chaining to Meta Publisher
+
+1. **Meta Publisher Utils** (outputs `{ data: [...] }`)
+2. **Meta Publisher**
+   - **Input Source** = `From JSON Property`
+   - **JSON Property Path** = `data`
+
+3. Optional: add **If** / **Switch** nodes to route successes vs errors (use `status`, `published`, etc.).
+
+---
+
+With this utility in front of your Publisher, you can define one compact set of inputs and instantly generate all the platform-specific jobs your workflow needs.
 
 ## Development
 
