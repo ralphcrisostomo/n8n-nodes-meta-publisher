@@ -14,7 +14,6 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 
 - [Features](#features)
 - [Supported resources & operations](#supported-resources--operations)
-- [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Credentials](#credentials)
 - [Quick start (Fields mode)](#quick-start-fields-mode)
@@ -55,6 +54,8 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 
 - Publish Photo
 - Publish Video (status polled until ready)
+- ~~Publish Reel~~ (work in progress)
+- ~~Publish Story~~ (work in progress)
 
 **Threads**
 
@@ -65,40 +66,13 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 
 ---
 
-## Prerequisites
-
-You’ll need on your development machine:
-
-- **git**
-- **Node.js v20+** and npm
-- **n8n** installed globally
-
-```bash
-npm install n8n -g
-```
-
-For a smooth developer experience, see n8n’s guide on setting up the node development environment.&#x20;
-
----
-
 ## Installation
 
 ### Community Nodes (recommended for users)
 
-- Publish the package to npm, then install it from within n8n via _Community Nodes_.
+- Install `n8n-node-meta-publisher` via n8n _Community Nodes_.
 
-### Local (developers)
-
-```bash
-# in your repo
-npm i
-npm run build
-# restart n8n pointing to your custom nodes folder if needed
-```
-
-The project follows the n8n node starter layout and build flow.&#x20;
-
----
+![Meta Publisher workflow](docs/images/community-nodes.png)
 
 ## Credentials
 
