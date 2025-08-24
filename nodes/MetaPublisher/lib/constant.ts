@@ -1,0 +1,17 @@
+export const INSTAGRAM = 'instagram';
+export const PUBLISH_IMAGE = 'publishImage';
+export const PUBLISH_VIDEO = 'publishVideo';
+export const PUBLISH_REEL = 'publishReel';
+export const PUBLISH_STORY = 'publishStory';
+export const PUBLISH_CAROUSEL = 'publishCarousel';
+export const FACEBOOK = 'facebook';
+export const PUBLISH_FB_PHOTO = 'publishFbPhoto';
+export const PUBLISH_FB_VIDEO = 'publishFbVideo';
+export const PUBLISH_FB_REEL = 'publishFbReel';
+export const PUBLISH_FB_STORY_PHOTO = 'publishFbStoryPhoto';
+export const PUBLISH_FB_STORY_VIDEO = 'publishFbStoryVideo';
+export const THREADS = 'threads';
+export const THREADS_PUBLISH_TEXT = 'threadsPublishText';
+export const THREADS_PUBLISH_IMAGE = 'threadsPublishImage';
+export const THREADS_PUBLISH_VIDEO = 'threadsPublishVideo';
+export const THREADS_PUBLISH_CAROUSEL = 'threadsPublishCarousel';

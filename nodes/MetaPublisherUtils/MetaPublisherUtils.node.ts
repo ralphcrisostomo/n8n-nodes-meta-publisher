@@ -7,6 +7,22 @@ import type {
 } from 'n8n-workflow';
 
 import { NodeOperationError } from 'n8n-workflow';
+import {
+	PUBLISH_CAROUSEL,
+	PUBLISH_FB_PHOTO,
+	PUBLISH_FB_REEL,
+	PUBLISH_FB_STORY_PHOTO,
+	PUBLISH_FB_STORY_VIDEO,
+	PUBLISH_FB_VIDEO,
+	PUBLISH_IMAGE,
+	PUBLISH_REEL,
+	PUBLISH_STORY,
+	PUBLISH_VIDEO,
+	THREADS_PUBLISH_CAROUSEL,
+	THREADS_PUBLISH_IMAGE,
+	THREADS_PUBLISH_TEXT,
+	THREADS_PUBLISH_VIDEO,
+} from '../MetaPublisher/lib/constant';
 
 export class MetaPublisherUtils implements INodeType {
 	description: INodeTypeDescription = {
@@ -57,13 +73,13 @@ export class MetaPublisherUtils implements INodeType {
 				type: 'multiOptions',
 				default: [],
 				options: [
-					{ name: 'Publish Carousel', value: 'publishCarousel' },
+					{ name: 'Publish Carousel', value: PUBLISH_CAROUSEL },
 
-					{ name: 'Publish Image', value: 'publishImage' },
+					{ name: 'Publish Image', value: PUBLISH_IMAGE },
 
-					{ name: 'Publish Reel', value: 'publishReel' },
-					{ name: 'Publish Story', value: 'publishStory' },
-					{ name: 'Publish Video', value: 'publishVideo' },
+					{ name: 'Publish Reel', value: PUBLISH_REEL },
+					{ name: 'Publish Story', value: PUBLISH_STORY },
+					{ name: 'Publish Video', value: PUBLISH_VIDEO },
 				],
 				displayOptions: { show: { resources: ['instagram'] } },
 			},
@@ -93,14 +109,14 @@ export class MetaPublisherUtils implements INodeType {
 				name: 'storyImageUrl',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { igOps: ['publishStory'] } },
+				displayOptions: { show: { igOps: [PUBLISH_STORY] } },
 			},
 			{
 				displayName: 'Story Video URL',
 				name: 'storyVideoUrl',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { igOps: ['publishStory'] } },
+				displayOptions: { show: { igOps: [PUBLISH_STORY] } },
 			},
 
 			// IG video extras
@@ -109,7 +125,7 @@ export class MetaPublisherUtils implements INodeType {
 				name: 'coverUrl',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { igOps: ['publishVideo'] } },
+				displayOptions: { show: { igOps: [PUBLISH_VIDEO] } },
 			},
 
 			// IG reel extras
@@ -119,21 +135,21 @@ export class MetaPublisherUtils implements INodeType {
 				type: 'string',
 				default: '',
 				description: 'If empty, falls back to Video URL',
-				displayOptions: { show: { igOps: ['publishReel'] } },
+				displayOptions: { show: { igOps: [PUBLISH_REEL] } },
 			},
 			{
 				displayName: 'Thumbnail Offset (Ms)',
 				name: 'thumbOffsetMs',
 				type: 'number',
 				default: 0,
-				displayOptions: { show: { igOps: ['publishReel'] } },
+				displayOptions: { show: { igOps: [PUBLISH_REEL] } },
 			},
 			{
 				displayName: 'Share to Feed',
 				name: 'shareToFeed',
 				type: 'boolean',
 				default: true,
-				displayOptions: { show: { igOps: ['publishReel'] } },
+				displayOptions: { show: { igOps: [PUBLISH_REEL] } },
 			},
 
 			// IG carousel items
@@ -143,7 +159,7 @@ export class MetaPublisherUtils implements INodeType {
 				type: 'fixedCollection',
 				typeOptions: { multipleValues: true },
 				default: {},
-				displayOptions: { show: { igOps: ['publishCarousel'] } },
+				displayOptions: { show: { igOps: [PUBLISH_CAROUSEL] } },
 				options: [
 					{
 						displayName: 'Item',
@@ -173,11 +189,11 @@ export class MetaPublisherUtils implements INodeType {
 				type: 'multiOptions',
 				default: [],
 				options: [
-					{ name: 'Publish Photo', value: 'publishFbPhoto' },
-					{ name: 'Publish Reel', value: 'publishFbReel' },
-					{ name: 'Publish Story Photo', value: 'publishFbStoryPhoto' },
-					{ name: 'Publish Story Video', value: 'publishFbStoryVideo' },
-					{ name: 'Publish Video', value: 'publishFbVideo' },
+					{ name: 'Publish Photo', value: PUBLISH_FB_PHOTO },
+					{ name: 'Publish Reel', value: PUBLISH_FB_REEL },
+					{ name: 'Publish Story Photo', value: PUBLISH_FB_STORY_PHOTO },
+					{ name: 'Publish Story Video', value: PUBLISH_FB_STORY_VIDEO },
+					{ name: 'Publish Video', value: PUBLISH_FB_VIDEO },
 				],
 				displayOptions: { show: { resources: ['facebook'] } },
 			},
@@ -193,14 +209,14 @@ export class MetaPublisherUtils implements INodeType {
 				name: 'fbTitle',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { fbOps: ['publishFbVideo'] } },
+				displayOptions: { show: { fbOps: [PUBLISH_FB_VIDEO] } },
 			},
 			{
 				displayName: 'FB Description (Video | Reel)',
 				name: 'fbDescription',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { fbOps: ['publishFbVideo', 'publishFbReel'] } },
+				displayOptions: { show: { fbOps: [PUBLISH_FB_VIDEO, PUBLISH_FB_REEL] } },
 			},
 
 			/* ---------------- Threads ops ---------------- */
@@ -210,10 +226,10 @@ export class MetaPublisherUtils implements INodeType {
 				type: 'multiOptions',
 				default: [],
 				options: [
-					{ name: 'Publish Text', value: 'threadsPublishText' },
-					{ name: 'Publish Image', value: 'threadsPublishImage' },
-					{ name: 'Publish Video', value: 'threadsPublishVideo' },
-					{ name: 'Publish Carousel', value: 'threadsPublishCarousel' },
+					{ name: 'Publish Text', value: THREADS_PUBLISH_TEXT },
+					{ name: 'Publish Image', value: THREADS_PUBLISH_IMAGE },
+					{ name: 'Publish Video', value: THREADS_PUBLISH_VIDEO },
+					{ name: 'Publish Carousel', value: THREADS_PUBLISH_CAROUSEL },
 				],
 				displayOptions: { show: { resources: ['threads'] } },
 			},
@@ -232,10 +248,10 @@ export class MetaPublisherUtils implements INodeType {
 				displayOptions: {
 					show: {
 						thOps: [
-							'threadsPublishText',
-							'threadsPublishImage',
-							'threadsPublishVideo',
-							'threadsPublishCarousel',
+							THREADS_PUBLISH_TEXT,
+							THREADS_PUBLISH_IMAGE,
+							THREADS_PUBLISH_VIDEO,
+							THREADS_PUBLISH_CAROUSEL,
 						],
 					},
 				},
@@ -245,7 +261,7 @@ export class MetaPublisherUtils implements INodeType {
 				name: 'altText',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { thOps: ['threadsPublishImage', 'threadsPublishVideo'] } },
+				displayOptions: { show: { thOps: [THREADS_PUBLISH_IMAGE, THREADS_PUBLISH_VIDEO] } },
 			},
 			{
 				displayName: 'Threads Carousel Items',
@@ -253,7 +269,7 @@ export class MetaPublisherUtils implements INodeType {
 				type: 'fixedCollection',
 				typeOptions: { multipleValues: true },
 				default: {},
-				displayOptions: { show: { thOps: ['threadsPublishCarousel'] } },
+				displayOptions: { show: { thOps: [THREADS_PUBLISH_CAROUSEL] } },
 				options: [
 					{
 						displayName: 'Item',
@@ -333,13 +349,13 @@ export class MetaPublisherUtils implements INodeType {
 					jobs.push(o);
 				};
 
-				if (igOps.includes('publishStory')) {
+				if (igOps.includes(PUBLISH_STORY)) {
 					// Story (video)
 					if (storyVideoUrl || videoUrl || includeExamples) {
 						push(
 							{
 								resource: 'instagram',
-								operation: 'publishStory',
+								operation: PUBLISH_STORY,
 								igUserId,
 								mediaUrl: storyVideoUrl || videoUrl || 'https://example.com/video.mp4',
 								caption: caption || 'Story (video)',
@@ -355,7 +371,7 @@ export class MetaPublisherUtils implements INodeType {
 						push(
 							{
 								resource: 'instagram',
-								operation: 'publishStory',
+								operation: PUBLISH_STORY,
 								igUserId,
 								mediaUrl: storyImageUrl || imageUrl || 'https://example.com/story.jpg',
 								caption: caption || 'Story (image)',
@@ -368,11 +384,11 @@ export class MetaPublisherUtils implements INodeType {
 					}
 				}
 
-				if (igOps.includes('publishImage') && (imageUrl || includeExamples)) {
+				if (igOps.includes(PUBLISH_IMAGE) && (imageUrl || includeExamples)) {
 					push(
 						{
 							resource: 'instagram',
-							operation: 'publishImage',
+							operation: PUBLISH_IMAGE,
 							igUserId,
 							mediaUrl: imageUrl || 'https://example.com/image.jpg',
 							caption,
@@ -383,11 +399,11 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (igOps.includes('publishVideo') && (videoUrl || includeExamples)) {
+				if (igOps.includes(PUBLISH_VIDEO) && (videoUrl || includeExamples)) {
 					push(
 						{
 							resource: 'instagram',
-							operation: 'publishVideo',
+							operation: PUBLISH_VIDEO,
 							igUserId,
 							mediaUrl: videoUrl || 'https://example.com/video.mp4',
 							caption,
@@ -399,11 +415,11 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (igOps.includes('publishReel') && (reelVideoUrl || includeExamples)) {
+				if (igOps.includes(PUBLISH_REEL) && (reelVideoUrl || includeExamples)) {
 					push(
 						{
 							resource: 'instagram',
-							operation: 'publishReel',
+							operation: PUBLISH_REEL,
 							igUserId,
 							videoUrl: reelVideoUrl || 'https://example.com/reel.mp4',
 							caption,
@@ -416,7 +432,7 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (igOps.includes('publishCarousel')) {
+				if (igOps.includes(PUBLISH_CAROUSEL)) {
 					const items = igItemsCol.length
 						? igItemsCol
 						: includeExamples
@@ -429,7 +445,7 @@ export class MetaPublisherUtils implements INodeType {
 						push(
 							{
 								resource: 'instagram',
-								operation: 'publishCarousel',
+								operation: PUBLISH_CAROUSEL,
 								igUserId,
 								items,
 								caption,
@@ -438,7 +454,7 @@ export class MetaPublisherUtils implements INodeType {
 							true,
 							'IG: igUserId is required for publishCarousel',
 						);
-					} else if (!skipMissing && igOps.includes('publishCarousel')) {
+					} else if (!skipMissing && igOps.includes(PUBLISH_CAROUSEL)) {
 						const msg = 'IG: Carousel requires at least 2 items';
 						new NodeOperationError(this.getNode(), msg, { itemIndex: i });
 					}
@@ -460,11 +476,11 @@ export class MetaPublisherUtils implements INodeType {
 					jobs.push(o);
 				};
 
-				if (fbOps.includes('publishFbPhoto') && (imageUrl || includeExamples)) {
+				if (fbOps.includes(PUBLISH_FB_PHOTO) && (imageUrl || includeExamples)) {
 					push(
 						{
 							resource: 'facebook',
-							operation: 'publishFbPhoto',
+							operation: PUBLISH_FB_PHOTO,
 							pageId,
 							imageUrl: imageUrl || 'https://example.com/photo.jpg',
 							caption,
@@ -474,11 +490,11 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (fbOps.includes('publishFbVideo') && (videoUrl || includeExamples)) {
+				if (fbOps.includes(PUBLISH_FB_VIDEO) && (videoUrl || includeExamples)) {
 					push(
 						{
 							resource: 'facebook',
-							operation: 'publishFbVideo',
+							operation: PUBLISH_FB_VIDEO,
 							pageId,
 							videoUrl: videoUrl || 'https://example.com/video.mp4',
 							title: fbTitle || 'FB Video Title',
@@ -489,11 +505,11 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (fbOps.includes('publishFbStoryPhoto') && (imageUrl || includeExamples)) {
+				if (fbOps.includes(PUBLISH_FB_STORY_PHOTO) && (imageUrl || includeExamples)) {
 					push(
 						{
 							resource: 'facebook',
-							operation: 'publishFbStoryPhoto',
+							operation: PUBLISH_FB_STORY_PHOTO,
 							pageId,
 							imageUrl: imageUrl || 'https://example.com/photo.jpg',
 						},
@@ -502,11 +518,11 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (fbOps.includes('publishFbStoryVideo') && (videoUrl || includeExamples)) {
+				if (fbOps.includes(PUBLISH_FB_STORY_VIDEO) && (videoUrl || includeExamples)) {
 					push(
 						{
 							resource: 'facebook',
-							operation: 'publishFbStoryVideo',
+							operation: PUBLISH_FB_STORY_VIDEO,
 							pageId,
 							videoUrl: videoUrl || 'https://example.com/video.mp4',
 						},
@@ -515,11 +531,11 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (fbOps.includes('publishFbReel') && (videoUrl || includeExamples)) {
+				if (fbOps.includes(PUBLISH_FB_REEL) && (videoUrl || includeExamples)) {
 					push(
 						{
 							resource: 'facebook',
-							operation: 'publishFbReel',
+							operation: PUBLISH_FB_REEL,
 							pageId,
 							videoUrl: videoUrl || 'https://example.com/video.mp4',
 							description: fbDescription || 'FB Reel Description',
@@ -546,11 +562,11 @@ export class MetaPublisherUtils implements INodeType {
 					jobs.push(o);
 				};
 
-				if (thOps.includes('threadsPublishText') && (text || includeExamples)) {
+				if (thOps.includes(THREADS_PUBLISH_TEXT) && (text || includeExamples)) {
 					push(
 						{
 							resource: 'threads',
-							operation: 'threadsPublishText',
+							operation: THREADS_PUBLISH_TEXT,
 							thUserId,
 							text: text || 'This is a Threads text post',
 						},
@@ -559,11 +575,11 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (thOps.includes('threadsPublishImage') && (imageUrl || includeExamples)) {
+				if (thOps.includes(THREADS_PUBLISH_IMAGE) && (imageUrl || includeExamples)) {
 					push(
 						{
 							resource: 'threads',
-							operation: 'threadsPublishImage',
+							operation: THREADS_PUBLISH_IMAGE,
 							thUserId,
 							imageUrl: imageUrl || 'https://example.com/thread-img.jpg',
 							text: text || 'Threads image caption',
@@ -574,11 +590,11 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (thOps.includes('threadsPublishVideo') && (videoUrl || includeExamples)) {
+				if (thOps.includes(THREADS_PUBLISH_VIDEO) && (videoUrl || includeExamples)) {
 					push(
 						{
 							resource: 'threads',
-							operation: 'threadsPublishVideo',
+							operation: THREADS_PUBLISH_VIDEO,
 							thUserId,
 							videoUrl: videoUrl || 'https://example.com/thread-video.mp4',
 							text: text || 'Threads video caption',
@@ -589,7 +605,7 @@ export class MetaPublisherUtils implements INodeType {
 					);
 				}
 
-				if (thOps.includes('threadsPublishCarousel')) {
+				if (thOps.includes(THREADS_PUBLISH_CAROUSEL)) {
 					const items = thItemsCol.length
 						? thItemsCol
 						: includeExamples
@@ -612,7 +628,7 @@ export class MetaPublisherUtils implements INodeType {
 						push(
 							{
 								resource: 'threads',
-								operation: 'threadsPublishCarousel',
+								operation: THREADS_PUBLISH_CAROUSEL,
 								thUserId,
 								items,
 								text: text || 'Threads carousel caption',
@@ -620,7 +636,7 @@ export class MetaPublisherUtils implements INodeType {
 							true,
 							'Threads: thUserId is required for threadsPublishCarousel',
 						);
-					} else if (!skipMissing && thOps.includes('threadsPublishCarousel')) {
+					} else if (!skipMissing && thOps.includes(THREADS_PUBLISH_CAROUSEL)) {
 						const msg = 'Threads: Carousel requires at least 2 items';
 						new NodeOperationError(this.getNode(), msg, { itemIndex: i });
 					}

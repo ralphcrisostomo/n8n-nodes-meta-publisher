@@ -9,6 +9,22 @@ import type {
 import { NodeOperationError } from 'n8n-workflow';
 
 import { OPS } from './lib/ops';
+import {
+	PUBLISH_CAROUSEL,
+	PUBLISH_FB_PHOTO,
+	PUBLISH_FB_REEL,
+	PUBLISH_FB_STORY_PHOTO,
+	PUBLISH_FB_STORY_VIDEO,
+	PUBLISH_FB_VIDEO,
+	PUBLISH_IMAGE,
+	PUBLISH_REEL,
+	PUBLISH_STORY,
+	PUBLISH_VIDEO,
+	THREADS_PUBLISH_CAROUSEL,
+	THREADS_PUBLISH_IMAGE,
+	THREADS_PUBLISH_TEXT,
+	THREADS_PUBLISH_VIDEO,
+} from './lib/constant';
 
 export class MetaPublisher implements INodeType {
 	description: INodeTypeDescription = {
@@ -74,7 +90,7 @@ export class MetaPublisher implements INodeType {
 				options: [
 					{
 						name: 'Publish Carousel (IG)',
-						value: 'publishCarousel',
+						value: PUBLISH_CAROUSEL,
 						action: 'Publish carousel on instagram',
 					},
 					{
@@ -84,17 +100,17 @@ export class MetaPublisher implements INodeType {
 					},
 					{
 						name: 'Publish Reel (IG)',
-						value: 'publishReel',
+						value: PUBLISH_REEL,
 						action: 'Publish reel on instagram',
 					},
 					{
 						name: 'Publish Story (IG)',
-						value: 'publishStory',
+						value: PUBLISH_STORY,
 						action: 'Publish story on instagram',
 					},
 					{
 						name: 'Publish Video (IG)',
-						value: 'publishVideo',
+						value: PUBLISH_VIDEO,
 						action: 'Publish video on instagram',
 					},
 				],
@@ -114,22 +130,22 @@ export class MetaPublisher implements INodeType {
 					},
 					{
 						name: 'Publish Reel (FB Page)',
-						value: 'publishFbReel',
+						value: PUBLISH_FB_REEL,
 						action: 'Publish reel on facebook page',
 					},
 					{
 						name: 'Publish Story Photo (FB Page)',
-						value: 'publishFbStoryPhoto',
+						value: PUBLISH_FB_STORY_PHOTO,
 						action: 'Publish a photo story',
 					},
 					{
 						name: 'Publish Story Video (FB Page)',
-						value: 'publishFbStoryVideo',
+						value: PUBLISH_FB_STORY_VIDEO,
 						action: 'Publish a video story',
 					},
 					{
 						name: 'Publish Video (FB Page)',
-						value: 'publishFbVideo',
+						value: PUBLISH_FB_VIDEO,
 						action: 'Publish video on facebook page',
 					},
 				],
@@ -149,17 +165,17 @@ export class MetaPublisher implements INodeType {
 					},
 					{
 						name: 'Publish Image (Threads)',
-						value: 'threadsPublishImage',
+						value: THREADS_PUBLISH_IMAGE,
 						action: 'Publish image on threads',
 					},
 					{
 						name: 'Publish Video (Threads)',
-						value: 'threadsPublishVideo',
+						value: THREADS_PUBLISH_VIDEO,
 						action: 'Publish video on threads',
 					},
 					{
 						name: 'Publish Carousel (Threads)',
-						value: 'threadsPublishCarousel',
+						value: THREADS_PUBLISH_CAROUSEL,
 						action: 'Publish carousel on threads',
 					},
 				],
@@ -209,7 +225,7 @@ export class MetaPublisher implements INodeType {
 				default: '',
 				required: true,
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishImage'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_IMAGE] },
 				},
 			},
 			{
@@ -218,7 +234,7 @@ export class MetaPublisher implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishImage'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_IMAGE] },
 				},
 			},
 
@@ -230,7 +246,7 @@ export class MetaPublisher implements INodeType {
 				default: '',
 				required: true,
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishVideo'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_VIDEO] },
 				},
 			},
 			{
@@ -239,7 +255,7 @@ export class MetaPublisher implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishVideo'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_VIDEO] },
 				},
 			},
 			{
@@ -248,7 +264,7 @@ export class MetaPublisher implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishVideo'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_VIDEO] },
 				},
 			},
 
@@ -260,7 +276,7 @@ export class MetaPublisher implements INodeType {
 				default: '',
 				required: true,
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishReel'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_REEL] },
 				},
 			},
 			{
@@ -269,7 +285,7 @@ export class MetaPublisher implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishReel'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_REEL] },
 				},
 			},
 			{
@@ -278,7 +294,7 @@ export class MetaPublisher implements INodeType {
 				type: 'number',
 				default: 0,
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishReel'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_REEL] },
 				},
 			},
 			{
@@ -287,7 +303,7 @@ export class MetaPublisher implements INodeType {
 				type: 'boolean',
 				default: true,
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishReel'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_REEL] },
 				},
 			},
 
@@ -302,7 +318,7 @@ export class MetaPublisher implements INodeType {
 					{ name: 'Video', value: 'video' },
 				],
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishStory'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_STORY] },
 				},
 			},
 			{
@@ -312,7 +328,7 @@ export class MetaPublisher implements INodeType {
 				default: '',
 				required: true,
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishStory'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_STORY] },
 				},
 			},
 			{
@@ -321,7 +337,7 @@ export class MetaPublisher implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['instagram'], operation: ['publishStory'] },
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_STORY] },
 				},
 			},
 
@@ -336,7 +352,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['instagram'],
-						operation: ['publishCarousel'],
+						operation: [PUBLISH_CAROUSEL],
 					},
 				},
 				options: [
@@ -368,7 +384,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['instagram'],
-						operation: ['publishCarousel'],
+						operation: [PUBLISH_CAROUSEL],
 					},
 				},
 			},
@@ -394,7 +410,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['facebook'],
-						operation: ['publishFbPhoto', 'publishFbStoryPhoto'],
+						operation: [PUBLISH_FB_PHOTO, PUBLISH_FB_STORY_PHOTO],
 					},
 				},
 			},
@@ -404,7 +420,7 @@ export class MetaPublisher implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['facebook'], operation: ['publishFbPhoto'] },
+					show: { inputSource: ['fields'], resource: ['facebook'], operation: [PUBLISH_FB_PHOTO] },
 				},
 			},
 
@@ -419,7 +435,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['facebook'],
-						operation: ['publishFbVideo', 'publishFbStoryVideo', 'publishFbReel'],
+						operation: [PUBLISH_FB_VIDEO, PUBLISH_FB_STORY_VIDEO, PUBLISH_FB_REEL],
 					},
 				},
 			},
@@ -429,7 +445,7 @@ export class MetaPublisher implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['facebook'], operation: ['publishFbVideo'] },
+					show: { inputSource: ['fields'], resource: ['facebook'], operation: [PUBLISH_FB_VIDEO] },
 				},
 			},
 			{
@@ -441,7 +457,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['facebook'],
-						operation: ['publishFbVideo', 'publishFbReel'],
+						operation: [PUBLISH_FB_VIDEO, PUBLISH_FB_REEL],
 					},
 				},
 			},
@@ -466,7 +482,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishText'],
+						operation: [THREADS_PUBLISH_TEXT],
 					},
 				},
 			},
@@ -482,7 +498,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishImage'],
+						operation: [THREADS_PUBLISH_IMAGE],
 					},
 				},
 			},
@@ -495,7 +511,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishImage'],
+						operation: [THREADS_PUBLISH_IMAGE],
 					},
 				},
 			},
@@ -508,7 +524,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishImage'],
+						operation: [THREADS_PUBLISH_IMAGE],
 					},
 				},
 			},
@@ -524,7 +540,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishVideo'],
+						operation: [THREADS_PUBLISH_VIDEO],
 					},
 				},
 			},
@@ -537,7 +553,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishVideo'],
+						operation: [THREADS_PUBLISH_VIDEO],
 					},
 				},
 			},
@@ -550,7 +566,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishVideo'],
+						operation: [THREADS_PUBLISH_VIDEO],
 					},
 				},
 			},
@@ -566,7 +582,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishCarousel'],
+						operation: [THREADS_PUBLISH_CAROUSEL],
 					},
 				},
 				options: [
@@ -599,7 +615,7 @@ export class MetaPublisher implements INodeType {
 					show: {
 						inputSource: ['fields'],
 						resource: ['threads'],
-						operation: ['threadsPublishCarousel'],
+						operation: [THREADS_PUBLISH_CAROUSEL],
 					},
 				},
 			},
@@ -640,7 +656,7 @@ export class MetaPublisher implements INodeType {
 						job.autoPublish ?? (this.getNodeParameter('autoPublish', i, true) as boolean);
 
 					switch (operation) {
-						case 'publishImage': {
+						case PUBLISH_IMAGE: {
 							const mediaUrl = job.mediaUrl ?? (this.getNodeParameter('mediaUrl', i) as string);
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
 							return OPS.publishImage(this, i, {
@@ -652,7 +668,7 @@ export class MetaPublisher implements INodeType {
 								autoPublish,
 							});
 						}
-						case 'publishVideo': {
+						case PUBLISH_VIDEO: {
 							const mediaUrl = job.mediaUrl ?? (this.getNodeParameter('mediaUrl', i) as string);
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
 							const coverUrl = job.coverUrl ?? (this.getNodeParameter('coverUrl', i, '') as string);
@@ -666,7 +682,7 @@ export class MetaPublisher implements INodeType {
 								autoPublish,
 							});
 						}
-						case 'publishReel': {
+						case PUBLISH_REEL: {
 							const videoUrl = job.videoUrl ?? (this.getNodeParameter('videoUrl', i) as string);
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
 							const thumbOffsetMs =
@@ -684,7 +700,7 @@ export class MetaPublisher implements INodeType {
 								autoPublish,
 							});
 						}
-						case 'publishStory': {
+						case PUBLISH_STORY: {
 							const mediaUrl = job.mediaUrl ?? (this.getNodeParameter('mediaUrl', i) as string);
 							const kind =
 								job.storyKind ?? (this.getNodeParameter('storyKind', i) as 'image' | 'video');
@@ -699,7 +715,7 @@ export class MetaPublisher implements INodeType {
 								autoPublish,
 							});
 						}
-						case 'publishCarousel': {
+						case PUBLISH_CAROUSEL: {
 							const itemsCol =
 								job.items ?? (this.getNodeParameter('items', i, {}) as any).item ?? [];
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
@@ -721,12 +737,12 @@ export class MetaPublisher implements INodeType {
 				case 'facebook': {
 					const pageId = job.pageId ?? (this.getNodeParameter('pageId', i) as string);
 					switch (operation) {
-						case 'publishFbPhoto': {
+						case PUBLISH_FB_PHOTO: {
 							const imageUrl = job.imageUrl ?? (this.getNodeParameter('imageUrl', i) as string);
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
 							return OPS.publishFbPhoto(this, i, { pageId, imageUrl, caption });
 						}
-						case 'publishFbVideo': {
+						case PUBLISH_FB_VIDEO: {
 							const videoUrl = job.videoUrl ?? (this.getNodeParameter('videoUrl', i) as string);
 							const title = job.title ?? (this.getNodeParameter('title', i, '') as string);
 							const description =
@@ -740,11 +756,11 @@ export class MetaPublisher implements INodeType {
 								maxWaitSec,
 							});
 						}
-						case 'publishFbStoryPhoto': {
+						case PUBLISH_FB_STORY_PHOTO: {
 							const imageUrl = job.imageUrl ?? (this.getNodeParameter('imageUrl', i) as string);
 							return OPS.publishFbStoryPhoto(this, i, { pageId, imageUrl });
 						}
-						case 'publishFbStoryVideo': {
+						case PUBLISH_FB_STORY_VIDEO: {
 							const videoUrl = job.videoUrl ?? (this.getNodeParameter('videoUrl', i) as string);
 							return OPS.publishStoryFbVideo(this, i, {
 								pageId,
@@ -753,7 +769,7 @@ export class MetaPublisher implements INodeType {
 								maxWaitSec,
 							});
 						}
-						case 'publishFbReel': {
+						case PUBLISH_FB_REEL: {
 							const videoUrl = job.videoUrl ?? (this.getNodeParameter('videoUrl', i) as string);
 							const description =
 								job.description ?? (this.getNodeParameter('description', i, '') as string);
@@ -775,11 +791,11 @@ export class MetaPublisher implements INodeType {
 					const userId =
 						job.thUserId ?? job.userId ?? (this.getNodeParameter('thUserId', i) as string);
 					switch (operation) {
-						case 'threadsPublishText': {
+						case THREADS_PUBLISH_TEXT: {
 							const text = job.text ?? (this.getNodeParameter('text', i, '') as string);
 							return OPS.threadsPublishText(this, i, { userId, text, pollSec, maxWaitSec });
 						}
-						case 'threadsPublishImage': {
+						case THREADS_PUBLISH_IMAGE: {
 							const imageUrl = job.imageUrl ?? (this.getNodeParameter('imageUrl', i) as string);
 							const text = job.text ?? (this.getNodeParameter('text', i, '') as string);
 							const altText = job.altText ?? (this.getNodeParameter('altText', i, '') as string);
@@ -792,7 +808,7 @@ export class MetaPublisher implements INodeType {
 								maxWaitSec,
 							});
 						}
-						case 'threadsPublishVideo': {
+						case THREADS_PUBLISH_VIDEO: {
 							const videoUrl = job.videoUrl ?? (this.getNodeParameter('videoUrl', i) as string);
 							const text = job.text ?? (this.getNodeParameter('text', i, '') as string);
 							const altText = job.altText ?? (this.getNodeParameter('altText', i, '') as string);
@@ -805,7 +821,7 @@ export class MetaPublisher implements INodeType {
 								maxWaitSec,
 							});
 						}
-						case 'threadsPublishCarousel': {
+						case THREADS_PUBLISH_CAROUSEL: {
 							const itemsCol =
 								job.items ?? (this.getNodeParameter('thItems', i, {}) as any).item ?? [];
 							const text = job.text ?? (this.getNodeParameter('text', i, '') as string);
