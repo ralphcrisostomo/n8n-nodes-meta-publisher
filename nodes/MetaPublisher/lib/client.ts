@@ -12,6 +12,7 @@ export async function apiRequest(
 	method: 'GET' | 'POST',
 	endpoint: string,
 	qs: Record<string, any> = {},
+	// TODO: Refactor this apiRequest to include header!
 	body: Record<string, any> = {},
 	itemIndex = 0,
 ): Promise<any> {

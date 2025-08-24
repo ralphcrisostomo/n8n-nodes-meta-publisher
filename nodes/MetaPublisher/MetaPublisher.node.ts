@@ -117,6 +117,11 @@ export class MetaPublisher implements INodeType {
 						value: 'publishFbVideo',
 						action: 'Publish video on facebook page',
 					},
+					{
+						name: 'Publish Reel (FB Page)',
+						value: 'publishFbReel',
+						action: 'Publish reel on facebook page',
+					},
 				],
 				displayOptions: { show: { inputSource: ['fields'], resource: ['facebook'] } },
 			},
@@ -397,7 +402,11 @@ export class MetaPublisher implements INodeType {
 				default: '',
 				required: true,
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['facebook'], operation: ['publishFbVideo'] },
+					show: {
+						inputSource: ['fields'],
+						resource: ['facebook'],
+						operation: ['publishFbVideo', 'publishFbReel'],
+					},
 				},
 			},
 			{
@@ -415,7 +424,11 @@ export class MetaPublisher implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: {
-					show: { inputSource: ['fields'], resource: ['facebook'], operation: ['publishFbVideo'] },
+					show: {
+						inputSource: ['fields'],
+						resource: ['facebook'],
+						operation: ['publishFbVideo', 'publishFbReel'],
+					},
 				},
 			},
 
@@ -708,6 +721,18 @@ export class MetaPublisher implements INodeType {
 								pageId,
 								videoUrl,
 								title,
+								description,
+								pollSec,
+								maxWaitSec,
+							});
+						}
+						case 'publishFbReel': {
+							const videoUrl = job.videoUrl ?? (this.getNodeParameter('videoUrl', i) as string);
+							const description =
+								job.description ?? (this.getNodeParameter('description', i, '') as string);
+							return OPS.publishFbReel(this, i, {
+								pageId,
+								videoUrl,
 								description,
 								pollSec,
 								maxWaitSec,

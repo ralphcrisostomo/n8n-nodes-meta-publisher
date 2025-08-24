@@ -175,6 +175,7 @@ export class MetaPublisherUtils implements INodeType {
 				options: [
 					{ name: 'Publish Photo', value: 'publishFbPhoto' },
 					{ name: 'Publish Video', value: 'publishFbVideo' },
+					{ name: 'Publish Reel', value: 'publishFbReel' },
 				],
 				displayOptions: { show: { resources: ['facebook'] } },
 			},
@@ -193,11 +194,11 @@ export class MetaPublisherUtils implements INodeType {
 				displayOptions: { show: { fbOps: ['publishFbVideo'] } },
 			},
 			{
-				displayName: 'FB Description (Video)',
+				displayName: 'FB Description (Video | Reel)',
 				name: 'fbDescription',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { fbOps: ['publishFbVideo'] } },
+				displayOptions: { show: { fbOps: ['publishFbVideo', 'publishFbReel'] } },
 			},
 
 			/* ---------------- Threads ops ---------------- */
@@ -483,6 +484,20 @@ export class MetaPublisherUtils implements INodeType {
 						},
 						true,
 						'FB: pageId is required for publishFbVideo',
+					);
+				}
+
+				if (fbOps.includes('publishFbReel') && (videoUrl || includeExamples)) {
+					push(
+						{
+							resource: 'facebook',
+							operation: 'publishFbReel',
+							pageId,
+							videoUrl: videoUrl || 'https://example.com/video.mp4',
+							description: fbDescription || 'FB Reel Description',
+						},
+						true,
+						'FB: pageId is required for publishFbReel',
 					);
 				}
 			}

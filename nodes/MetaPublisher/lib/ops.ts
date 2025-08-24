@@ -3,7 +3,15 @@ import { pollUntil } from './poll';
 import type { PublishResult, CarouselItem } from './types';
 
 import { igCreateContainer, igGetStatus, igPublish, igGetPermalink } from './ig';
-import { fbPublishPhoto, fbCreateVideo, fbGetVideoStatus, fbGetPermalink } from './fb';
+import {
+	fbPublishPhoto,
+	fbCreateVideo,
+	fbGetVideoStatus,
+	fbGetPermalink,
+	fbCreateReel,
+	fbPublishReel,
+	fbGetPageAccessToken,
+} from './fb';
 import {
 	thCreateContainer,
 	thCreateCarouselItem,
@@ -265,12 +273,17 @@ export const OPS = {
 		i: number,
 		a: { pageId: string; imageUrl: string; caption?: string },
 	): Promise<PublishResult> {
+		const pageAccessToken = await fbGetPageAccessToken(ctx, i, {
+			pageId: a.pageId,
+		});
 		const res = await fbPublishPhoto(ctx, i, {
+			pageAccessToken,
 			pageId: a.pageId,
 			mediaUrl: a.imageUrl,
 			caption: a.caption,
 		});
-		const permalink = res && res.post_id ? await fbGetPermalink(ctx, res.post_id) : null;
+		const permalink =
+			res && res.post_id ? await fbGetPermalink(ctx, res.post_id, pageAccessToken) : null;
 		return { platform: 'facebook', type: 'image', result: res, published: true, permalink };
 	},
 
@@ -286,14 +299,18 @@ export const OPS = {
 			maxWaitSec: number;
 		},
 	): Promise<PublishResult> {
+		const pageAccessToken = await fbGetPageAccessToken(ctx, i, {
+			pageId: a.pageId,
+		});
 		const videoId = await fbCreateVideo(ctx, i, {
+			pageAccessToken,
 			pageId: a.pageId,
 			videoUrl: a.videoUrl,
 			title: a.title,
 			description: a.description,
 		});
 		const status = await pollUntil({
-			check: () => fbGetVideoStatus(ctx, videoId),
+			check: () => fbGetVideoStatus(ctx, videoId, pageAccessToken),
 			isDone: (r: any) => {
 				const s = (r?.status?.video_status || '').toLowerCase();
 				return ['ready', 'error', 'live', 'published'].includes(s);
@@ -301,13 +318,60 @@ export const OPS = {
 			intervalMs: a.pollSec * 1000,
 			maxMs: a.maxWaitSec * 1000,
 		});
-		const permalink = videoId ? await fbGetPermalink(ctx, videoId) : null;
+		const permalink = videoId ? await fbGetPermalink(ctx, videoId, pageAccessToken) : null;
 		return {
 			platform: 'facebook',
 			type: 'video',
 			videoId,
 			status: status?.status?.video_status,
 			published: true,
+			permalink,
+		};
+	},
+
+	async publishFbReel(
+		ctx: IExecuteFunctions,
+		i: number,
+		a: {
+			pageId: string;
+			videoUrl: string;
+			description?: string;
+			pollSec: number;
+			maxWaitSec: number;
+		},
+	): Promise<PublishResult> {
+		const pageAccessToken = await fbGetPageAccessToken(ctx, i, {
+			pageId: a.pageId,
+		});
+
+		const videoId = await fbCreateReel(ctx, i, {
+			pageAccessToken,
+			pageId: a.pageId,
+			videoUrl: a.videoUrl,
+		});
+		const status = await pollUntil({
+			check: () => fbGetVideoStatus(ctx, videoId, pageAccessToken),
+			isDone: (r: any) => {
+				const s = (r?.status?.video_status || '').toLowerCase();
+				return ['ready', 'error', 'live', 'published', 'upload_complete'].includes(s);
+			},
+			intervalMs: a.pollSec * 1000,
+			maxMs: a.maxWaitSec * 1000,
+		});
+		const publishResult = await fbPublishReel(ctx, i, {
+			pageAccessToken,
+			pageId: a.pageId,
+			videoId: videoId,
+			description: a.description,
+		});
+		const permalink = videoId ? await fbGetPermalink(ctx, videoId, pageAccessToken) : null;
+		return {
+			platform: 'facebook',
+			type: 'reel',
+			videoId,
+			status: status?.status?.video_status,
+			published: true,
+			publishResult,
 			permalink,
 		};
 	},
