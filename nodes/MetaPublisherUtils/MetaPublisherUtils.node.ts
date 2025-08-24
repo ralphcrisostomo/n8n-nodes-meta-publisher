@@ -15,7 +15,22 @@ export class MetaPublisherUtils implements INodeType {
 		icon: { light: 'file:MetaPublisher.svg', dark: 'file:MetaPublisher.svg' },
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+		subtitle:
+			'={{ (() => { \
+				const r = $parameter["resources"] || []; \
+				const label = r.length ? r.join(", ") : "Select resources"; \
+				const ig = $parameter["igOps"] || []; \
+				const fb = $parameter["fbOps"] || []; \
+				const th = $parameter["thOps"] || []; \
+				const total = ig.length + fb.length + th.length; \
+				if (!total) return label + " · No ops"; \
+				if (r.length === 1) { \
+					const map = { instagram: ig, facebook: fb, threads: th }; \
+					const ops = (map[r[0]] || []).join(", "); \
+					return label + " · " + (ops || "No ops"); \
+				} \
+				return label + " · " + total + " op" + (total > 1 ? "s" : ""); \
+			})() }}',
 		description: 'Generate JSON payload(s) for Meta Publisher node',
 		defaults: { name: 'Meta Publisher Utils' },
 		inputs: ['main'] as NodeConnectionType[],

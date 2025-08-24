@@ -261,13 +261,20 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 		"operation": "publishCarousel",
 		"igUserId": "112233445566",
 		"items": [
-			{ "type": "image", "url": "https://example.com/img1.jpg", "caption": "Image Caption" },
-			{ "type": "video", "url": "https://example.com/vid1.mp4", "caption": "Video Caption" }
+			{
+				"type": "image",
+				"url": "https://example.com/img1.jpg",
+				"caption": "Image Caption"
+			},
+			{
+				"type": "video",
+				"url": "https://example.com/vid1.mp4",
+				"caption": "Video Caption"
+			}
 		],
 		"caption": "My carousel",
 		"autoPublish": true
 	},
-
 	{
 		"resource": "facebook",
 		"operation": "publishFbPhoto",

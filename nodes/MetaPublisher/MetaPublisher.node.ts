@@ -17,7 +17,8 @@ export class MetaPublisher implements INodeType {
 		icon: { light: 'file:MetaPublisher.svg', dark: 'file:MetaPublisher.svg' },
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+		subtitle:
+			'={{ $parameter["inputSource"] === "json" ? "JSON: " + ($parameter["jsonProp"] || "$json") : ($parameter["operation"] || "Select operation") + " · " + (($parameter["resource"] || $parameter["platform"]) || "Select resource")}}',
 		description: 'Publish to Instagram, Facebook Pages, and Threads',
 		defaults: { name: 'Meta Publisher' },
 		inputs: ['main'] as NodeConnectionType[],
