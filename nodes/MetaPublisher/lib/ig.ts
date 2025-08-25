@@ -1,6 +1,7 @@
 import type { IExecuteFunctions } from 'n8n-workflow';
 import { apiRequest } from './client';
 import type { IgStatusCode } from './types';
+import { retry } from './utils';
 
 export type IgStatus = { status_code?: IgStatusCode };
 
@@ -76,24 +77,34 @@ export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: Ig
 }
 
 export function igGetStatus(this: IExecuteFunctions, creationId: string) {
-	return apiRequest(
-		this,
-		'GET',
-		`/${encodeURIComponent(creationId)}`,
-		{ fields: 'status_code' },
-		{},
+	return retry(
+		async () => {
+			return apiRequest(
+				this,
+				'GET',
+				`/${encodeURIComponent(creationId)}`,
+				{ fields: 'status_code' },
+				{},
+			);
+		},
+		{ tries: 20, delayMs: 2000 },
 	);
 }
 
 export async function igGetPermalink(this: IExecuteFunctions, mediaId: string) {
-	const res = await apiRequest(
-		this,
-		'GET',
-		`/${encodeURIComponent(mediaId)}`,
-		{ fields: 'permalink' },
-		{},
+	return retry(
+		async () => {
+			const res = await apiRequest(
+				this,
+				'GET',
+				`/${encodeURIComponent(mediaId)}`,
+				{ fields: 'permalink' },
+				{},
+			);
+			return res?.permalink;
+		},
+		{ tries: 20, delayMs: 2000 },
 	);
-	return res?.permalink;
 }
 
 export async function igPublish(
@@ -102,14 +113,18 @@ export async function igPublish(
 	igUserId: string,
 	creationId: string,
 ) {
-	const res = await apiRequest(
-		this,
-		'POST',
-		`/${encodeURIComponent(igUserId)}/media_publish`,
-		{},
-		{ creation_id: creationId },
-		i,
+	return retry(
+		async () => {
+			const res = await apiRequest(
+				this,
+				'POST',
+				`/${encodeURIComponent(igUserId)}/media_publish`,
+				{},
+				{ creation_id: creationId },
+				i,
+			);
+			return res;
+		},
+		{ tries: 20, delayMs: 2000 },
 	);
-	if (!res?.id) throw new Error('IG publish failed: ' + JSON.stringify(res));
-	return res;
 }

@@ -1,5 +1,6 @@
 import type { IExecuteFunctions } from 'n8n-workflow';
 import { apiRequest } from './client';
+import { retry } from './utils';
 
 const T_BASE = 'https://graph.threads.net/v1.0';
 
@@ -86,11 +87,16 @@ export async function thPublish(
 	userId: string,
 	containerId: string,
 ) {
-	const res = await tPost(ctx, i, `/${encodeURIComponent(userId)}/threads_publish`, {
-		creation_id: containerId,
-	});
-	if (!res?.id) throw new Error(`Threads publish failed: ${JSON.stringify(res)}`);
-	return res; // { id: thread_id }
+	return retry(
+		async () => {
+			const res = await tPost(ctx, i, `/${encodeURIComponent(userId)}/threads_publish`, {
+				creation_id: containerId,
+			});
+			if (!res?.id) throw new Error(`Threads publish failed: ${JSON.stringify(res)}`);
+			return res; // { id: thread_id }
+		},
+		{ tries: 20, delayMs: 2000 },
+	);
 }
 
 export async function thGetStatus(ctx: IExecuteFunctions, containerId: string) {
@@ -100,8 +106,13 @@ export async function thGetStatus(ctx: IExecuteFunctions, containerId: string) {
 }
 
 export async function thGetPermalink(ctx: IExecuteFunctions, mediaId: string) {
-	const res = await tGet(ctx, `/${encodeURIComponent(mediaId)}/`, {
-		fields: 'permalink',
-	});
-	return res?.permalink;
+	return retry(
+		async () => {
+			const res = await tGet(ctx, `/${encodeURIComponent(mediaId)}/`, {
+				fields: 'permalink',
+			});
+			return res?.permalink;
+		},
+		{ tries: 20, delayMs: 2000 },
+	);
 }
