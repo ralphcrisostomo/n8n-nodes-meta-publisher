@@ -83,7 +83,7 @@ export function igGetStatus(this: IExecuteFunctions, creationId: string) {
 				this,
 				'GET',
 				`/${encodeURIComponent(creationId)}`,
-				{ fields: 'status_code' },
+				{ fields: 'status_code,status' },
 				{},
 			);
 		},

@@ -1,5 +1,5 @@
 import type { IExecuteFunctions } from 'n8n-workflow';
-
+import pack from '../../../package.json';
 export const GRAPH_VERSION = 'v23.0';
 export const GRAPH_BASE = `https://graph.facebook.com/${GRAPH_VERSION}`;
 
@@ -25,6 +25,14 @@ export async function apiRequest(
 			options.qs = { access_token: cred.accessToken, ...qs };
 			// Note: Enable this to debug the request!
 			console.log('-------------------------');
+			console.log(`${pack.name}:`, `v${pack.version}`);
+			try {
+				console.log('Operation:', thisArg.getNodeParameter('operation', itemIndex, 'unknown'));
+			} catch (e) {
+				console.log('xxxxx');
+				console.log(e);
+				console.log('xxxxx');
+			}
 			console.log(JSON.stringify({ options }, null, 2));
 
 			const res = await thisArg.helpers.request(options);

@@ -24,6 +24,7 @@ import {
 	thPublish,
 	thGetPermalink,
 } from './threads';
+import { sleep } from './utils';
 
 export const OPS = {
 	/* ===================== Instagram ===================== */
@@ -53,12 +54,10 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = status?.status_code === 'FINISHED';
-		// Note: We don't publish because it's not possible to publish a non-story image'
-		// const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
-		// const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
-		console.log('finished', finished);
-		const pub = null;
-		const permalink = null;
+		// Note: Adding delay to avoid "Too Many Requests" error
+		await sleep(10000);
+		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			id: 'instagram-image',
 			platform: 'instagram',
