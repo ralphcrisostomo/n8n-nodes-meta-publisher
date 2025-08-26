@@ -303,10 +303,8 @@ export const OPS = {
 			caption: a.caption,
 			published: true,
 		});
-		const permalink =
-			publishResult && publishResult.post_id
-				? await fbGetPostPermalink(ctx, publishResult.post_id, pageAccessToken)
-				: null;
+		await sleep(jitter(2000));
+		const permalink = `https://www.facebook.com/photo.php?fbid=${publishResult.id}`;
 		return {
 			id: 'facebook-image',
 			platform: 'facebook',
