@@ -1,5 +1,7 @@
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+export const jitter = (ms: number) => ms + Math.floor(Math.random() * 300);
+
 export async function retry<T>(
 	fn: () => Promise<T>,
 	{

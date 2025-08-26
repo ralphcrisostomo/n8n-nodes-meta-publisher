@@ -26,15 +26,8 @@ export async function apiRequest(
 			// Note: Enable this to debug the request!
 			console.log('-------------------------');
 			console.log(`${pack.name}:`, `v${pack.version}`);
-			try {
-				console.log('Operation:', thisArg.getNodeParameter('operation', itemIndex, 'unknown'));
-			} catch (e) {
-				console.log('xxxxx');
-				console.log(e);
-				console.log('xxxxx');
-			}
+			console.log('Operation:', thisArg.getNodeParameter('operation', itemIndex, 'unknown'));
 			console.log(JSON.stringify({ options }, null, 2));
-
 			const res = await thisArg.helpers.request(options);
 			console.log(JSON.stringify({ res }, null, 2));
 			return res;
