@@ -55,9 +55,10 @@ export const OPS = {
 		});
 		const finished = status?.status_code === 'FINISHED';
 		await sleep(jitter(5000));
-		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
-		await sleep(jitter(5000));
-		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
+		// const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+		// await sleep(jitter(5000));
+		const pub = null;
+		const permalink = id && finished ? await igGetPermalink.call(ctx, id) : null;
 		return {
 			id: 'instagram-image',
 			platform: 'instagram',
