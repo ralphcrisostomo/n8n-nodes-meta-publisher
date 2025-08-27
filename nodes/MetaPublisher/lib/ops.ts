@@ -54,9 +54,9 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = status?.status_code === 'FINISHED';
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			id: 'instagram-image',
@@ -97,9 +97,9 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = status?.status_code === 'FINISHED';
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			id: 'instagram-video',
@@ -142,9 +142,9 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = status?.status_code === 'FINISHED';
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			id: 'instagram-reel',
@@ -185,9 +185,9 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = status?.status_code === 'FINISHED';
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			id: `instagram-story-${a.kind}`,
@@ -267,10 +267,10 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = status?.status_code === 'FINISHED';
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub =
 			a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, parentId) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
 		return {
 			id: 'instagram-carousel',
@@ -303,7 +303,7 @@ export const OPS = {
 			caption: a.caption,
 			published: true,
 		});
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = `https://www.facebook.com/photo.php?fbid=${publishResult.id}`;
 		return {
 			id: 'facebook-image',
@@ -346,7 +346,7 @@ export const OPS = {
 			intervalMs: a.pollSec * 1000,
 			maxMs: a.maxWaitSec * 1000,
 		});
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = videoId ? await fbGetPermalink(ctx, videoId, pageAccessToken) : null;
 		return {
 			id: 'facebook-video',
@@ -376,13 +376,13 @@ export const OPS = {
 			mediaUrl: a.imageUrl,
 			published: false,
 		});
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const publishResult = await fbPublishStoryPhoto(ctx, i, {
 			pageAccessToken,
 			pageId: a.pageId,
 			photoId: prePublishResult.id,
 		});
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink =
 			publishResult && publishResult.post_id
 				? await fbGetPostPermalink(ctx, publishResult.post_id, pageAccessToken)
@@ -424,7 +424,7 @@ export const OPS = {
 			intervalMs: a.pollSec * 1000,
 			maxMs: a.maxWaitSec * 1000,
 		});
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const publishResult = await fbPublishStoryVideo(ctx, i, {
 			pageAccessToken,
 			pageId: a.pageId,
@@ -476,7 +476,7 @@ export const OPS = {
 			intervalMs: a.pollSec * 1000,
 			maxMs: a.maxWaitSec * 1000,
 		});
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const publishResult = await fbPublishReel(ctx, i, {
 			pageAccessToken,
 			pageId: a.pageId,
@@ -513,9 +513,9 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = ['FINISHED', 'PUBLISHED'].includes(st?.status ?? '');
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
 			id: `threads-text`,
@@ -555,9 +555,9 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = ['FINISHED', 'PUBLISHED'].includes(st?.status ?? '');
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
 			id: `threads-image`,
@@ -597,9 +597,9 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = ['FINISHED', 'PUBLISHED'].includes(st?.status ?? '');
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub = finished ? await thPublish(ctx, i, a.userId, id) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
 			id: `threads-video`,
@@ -666,9 +666,9 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = ['FINISHED', 'PUBLISHED'].includes(st?.status ?? '');
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const pub = finished ? await thPublish(ctx, i, a.userId, parentId) : null;
-		await sleep(jitter(2000));
+		await sleep(jitter(5000));
 		const permalink = pub && pub.id ? await thGetPermalink(ctx, pub.id) : null;
 		return {
 			id: `threads-carousel`,

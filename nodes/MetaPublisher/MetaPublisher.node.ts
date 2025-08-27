@@ -187,7 +187,7 @@ export class MetaPublisher implements INodeType {
 				displayName: 'Polling Interval (Sec)',
 				name: 'pollSec',
 				type: 'number',
-				default: 2,
+				default: 5,
 				typeOptions: { minValue: 1, maxValue: 60 },
 				description: 'Check processing status every N seconds',
 			},

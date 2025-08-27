@@ -95,7 +95,7 @@ export async function thPublish(
 			if (!res?.id) throw new Error(`Threads publish failed: ${JSON.stringify(res)}`);
 			return res; // { id: thread_id }
 		},
-		{ tries: 20, delayMs: 2000 },
+		{ tries: 10, delayMs: 5000 },
 	);
 }
 
@@ -113,6 +113,6 @@ export async function thGetPermalink(ctx: IExecuteFunctions, mediaId: string) {
 			});
 			return res?.permalink;
 		},
-		{ tries: 20, delayMs: 2000 },
+		{ tries: 10, delayMs: 5000 },
 	);
 }

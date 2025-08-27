@@ -87,7 +87,7 @@ export function igGetStatus(this: IExecuteFunctions, creationId: string) {
 				{},
 			);
 		},
-		{ tries: 20, delayMs: 2000 },
+		{ tries: 10, delayMs: 5000 },
 	);
 }
 
@@ -103,7 +103,7 @@ export async function igGetPermalink(this: IExecuteFunctions, mediaId: string) {
 			);
 			return res?.permalink;
 		},
-		{ tries: 20, delayMs: 2000 },
+		{ tries: 10, delayMs: 5000 },
 	);
 }
 
@@ -125,6 +125,6 @@ export async function igPublish(
 			);
 			return res;
 		},
-		{ tries: 20, delayMs: 2000 },
+		{ tries: 10, delayMs: 5000 },
 	);
 }

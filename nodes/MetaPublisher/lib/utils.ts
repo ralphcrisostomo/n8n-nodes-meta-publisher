@@ -14,10 +14,11 @@ export async function retry<T>(
 	let wait = delayMs;
 	for (let attempt = 1; attempt <= tries; attempt++) {
 		try {
-			console.log({ attempt, tries, wait });
 			return await fn();
 		} catch (e) {
 			err = e;
+			console.error(e);
+			console.log({ attempt, tries, wait });
 			if (attempt === tries) break;
 			await sleep(wait);
 			wait = Math.ceil(wait * factor);
