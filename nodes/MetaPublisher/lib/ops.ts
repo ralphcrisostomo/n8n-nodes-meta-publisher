@@ -54,11 +54,11 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = status?.status_code === 'FINISHED';
-		await sleep(jitter(5000));
-		// const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+		await sleep(jitter(10000));
+		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
 		// await sleep(jitter(5000));
-		const pub = null;
-		const permalink = id && finished ? await igGetPermalink.call(ctx, id) : null;
+		// const pub = null;
+		const permalink = null; // = id && finished ? await igGetPermalink.call(ctx, id) : null;
 		return {
 			id: 'instagram-image',
 			platform: 'instagram',
