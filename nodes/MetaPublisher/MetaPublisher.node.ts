@@ -219,7 +219,9 @@ export class MetaPublisher implements INodeType {
 
 			// IG Image
 			{
-				displayName: 'Image URL',
+				displayName: 'Image URL (Allowed Aspect Ratios: 1:1, 4:5 and 1.91:1)',
+				description:
+					'URL of the image. Allowed aspect ratios: 1:1, 4:5 and 1.91:1. Recommended: at least 1080px on the shorter side.',
 				name: 'mediaUrl',
 				type: 'string',
 				default: '',
