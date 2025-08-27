@@ -31,6 +31,13 @@ import {
 	THREADS_PUBLISH_VIDEO,
 } from '../MetaPublisher/lib/constant';
 
+// ─── UI Hints ──────────────────────────────────────────────────────────────
+const IG_FEED_IMAGE_RATIO_HINT =
+	'Allowed aspect ratios: 4:5 (0.8) to 1.91:1. Recommended: 1080×1350 (portrait), 1080×1080 (square), 1080×608 (landscape).';
+const IG_STORY_RATIO_HINT = 'Stories are 9:16 (~0.5625). Recommended: 1080×1920.';
+const IG_REEL_RATIO_HINT =
+	'Reels are 9:16 recommended (1080×1920). Other ratios may be letterboxed.';
+
 export class MetaPublisherUtils implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Meta Publisher Utils',
@@ -106,24 +113,54 @@ export class MetaPublisherUtils implements INodeType {
 			},
 
 			// Common IG fields
-			{ displayName: 'Image URL', name: 'imageUrl', type: 'string', default: '' },
-			{ displayName: 'Video URL', name: 'videoUrl', type: 'string', default: '' },
-			{ displayName: 'Caption', name: 'caption', type: 'string', default: '' },
-
-			// Story-specific (optional, if you want different media for story)
 			{
-				displayName: 'Story Image URL',
+				displayName: 'Image URL (Generic)',
+				name: 'imageUrl',
+				type: 'string',
+				default: '',
+				description:
+					'Generic image URL used where a specific field is not provided (e.g., Threads/FB or IG Story fallback)',
+			},
+			{
+				displayName: 'Video URL (Generic)',
+				name: 'videoUrl',
+				type: 'string',
+				default: '',
+				description:
+					'Generic video URL used where a specific field is not provided (e.g., IG Story/FB/Threads fallback)',
+			},
+			{
+				displayName: 'Caption',
+				name: 'caption',
+				type: 'string',
+				default: '',
+			},
+
+			// IG Feed: Image
+			{
+				displayName: 'Feed Image URL (4:5 to 1.91:1)',
+				name: 'feedImageUrl',
+				type: 'string',
+				default: '',
+				description: IG_FEED_IMAGE_RATIO_HINT,
+				displayOptions: { show: { igOps: [PUBLISH_IMAGE], resources: ['instagram'] } },
+			},
+			// Story-specific
+			{
+				displayName: 'Story Image URL (9:16)',
 				name: 'storyImageUrl',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { igOps: [PUBLISH_STORY] } },
+				description: IG_STORY_RATIO_HINT,
+				displayOptions: { show: { igOps: [PUBLISH_STORY], resources: ['instagram'] } },
 			},
 			{
-				displayName: 'Story Video URL',
+				displayName: 'Story Video URL (9:16)',
 				name: 'storyVideoUrl',
 				type: 'string',
 				default: '',
-				displayOptions: { show: { igOps: [PUBLISH_STORY] } },
+				description: IG_STORY_RATIO_HINT,
+				displayOptions: { show: { igOps: [PUBLISH_STORY], resources: ['instagram'] } },
 			},
 
 			// IG video extras
@@ -135,28 +172,38 @@ export class MetaPublisherUtils implements INodeType {
 				displayOptions: { show: { igOps: [PUBLISH_VIDEO] } },
 			},
 
+			// IG video extras
+			{
+				displayName: 'Cover Image URL (IG Video)',
+				name: 'coverUrl',
+				type: 'string',
+				default: '',
+				displayOptions: { show: { igOps: [PUBLISH_VIDEO], resources: ['instagram'] } },
+				description: 'Optional cover image for IG video. ' + IG_FEED_IMAGE_RATIO_HINT,
+			},
+
 			// IG reel extras
 			{
-				displayName: 'Reel Video URL (Override)',
+				displayName: 'Reel Video URL (Override, 9:16 Recommended)',
 				name: 'reelVideoUrl',
 				type: 'string',
 				default: '',
-				description: 'If empty, falls back to Video URL',
-				displayOptions: { show: { igOps: [PUBLISH_REEL] } },
+				description: IG_REEL_RATIO_HINT + ' If empty, falls back to Video URL (Generic).',
+				displayOptions: { show: { igOps: [PUBLISH_REEL], resources: ['instagram'] } },
 			},
 			{
 				displayName: 'Thumbnail Offset (Ms)',
 				name: 'thumbOffsetMs',
 				type: 'number',
 				default: 0,
-				displayOptions: { show: { igOps: [PUBLISH_REEL] } },
+				displayOptions: { show: { igOps: [PUBLISH_REEL], resources: ['instagram'] } },
 			},
 			{
 				displayName: 'Share to Feed',
 				name: 'shareToFeed',
 				type: 'boolean',
 				default: true,
-				displayOptions: { show: { igOps: [PUBLISH_REEL] } },
+				displayOptions: { show: { igOps: [PUBLISH_REEL], resources: ['instagram'] } },
 			},
 
 			// IG carousel items
@@ -395,13 +442,17 @@ export class MetaPublisherUtils implements INodeType {
 					}
 				}
 
-				if (igOps.includes(PUBLISH_IMAGE) && (imageUrl || includeExamples)) {
+				const feedImageUrl = this.getNodeParameter('feedImageUrl', i, '') as string;
+
+				if (igOps.includes(PUBLISH_IMAGE) && (feedImageUrl || imageUrl || includeExamples)) {
 					push(
 						{
 							resource: 'instagram',
 							operation: PUBLISH_IMAGE,
 							igUserId,
-							mediaUrl: includeExamples ? imageUrl || EXAMPLE_IMAGE_URL : imageUrl,
+							mediaUrl: includeExamples
+								? feedImageUrl || imageUrl || EXAMPLE_IMAGE_URL
+								: feedImageUrl || imageUrl,
 							caption: includeExamples ? caption || EXAMPLE_CAPTION : caption,
 							autoPublish: igAutoPublish,
 						},
