@@ -44,7 +44,7 @@ export class MetaPublisherUtils implements INodeType {
 		version: 2, // bump version
 
 		description:
-			'⚠️ Deprecated. Please switch to “MetaPublisher JSON Generator”. This node will be removed in a future release.',
+			'⚠️ Deprecated. Please switch to “Meta Publisher JSON Generator”. This node will be removed in a future release.',
 
 		hints: [
 			{
