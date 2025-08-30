@@ -38,38 +38,38 @@ const IG_STORY_RATIO_HINT = 'Stories are 9:16 (~0.5625). Recommended: 1080×1920
 const IG_REEL_RATIO_HINT =
 	'Reels are 9:16 recommended (1080×1920). Other ratios may be letterboxed.';
 
-export class MetaPublisherUtils implements INodeType {
+export class MetaPublisherJsonGenerator implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Meta Publisher Utils (Deprecated)',
-		version: 2, // bump version
-
-		description:
-			'⚠️ Deprecated. Please switch to “MetaPublisher JSON Generator”. This node will be removed in a future release.',
-
+		displayName: 'Meta Publisher JSON Generator',
+		// Optional: add a small subtitle
+		subtitle: 'Formerly “Meta Publisher Utils”',
+		codex: {
+			alias: ['Meta Publisher Utils', 'MetaPublisher Utils', 'MetaPublisher JSON'],
+		},
 		hints: [
 			{
 				type: 'warning',
 				message:
-					'This node is deprecated. Use “MetaPublisher JSON Generator” instead. Workflows still run, but you should migrate soon.',
-				location: 'ndv',
+					'This node was formerly called “Meta Publisher Utils”. The internal type stays the same, so your existing workflows continue to work.',
+				location: 'ndv', // node details view
 			},
 		],
-
-		name: 'metaPublisherUtils',
+		name: 'metaPublisherJsonGenerator',
 		icon: { light: 'file:MetaPublisher.svg', dark: 'file:MetaPublisher.svg' },
 		group: ['transform'],
-		subtitle: '⚠️ Deprecated',
-		defaults: { name: 'Meta Publisher Utils' },
+		version: 2,
+		description: 'Generate JSON payload(s) for Meta Publisher node',
+		defaults: { name: 'Meta Publisher JSON Generator' },
 		inputs: ['main'] as NodeConnectionType[],
 		outputs: ['main'] as NodeConnectionType[],
 		properties: [
 			{
-				displayName: 'Deprecated Notice',
-				name: 'deprecatedNotice',
+				displayName: 'Heads up',
+				name: 'renameNotice',
 				type: 'notice',
 				default: '',
 				description:
-					'This node will be removed in a future release. Please migrate to “Meta Publisher JSON Generator”.',
+					'This node was renamed from “Meta Publisher Utils” to “MetaPublisher JSON Generator”. No action needed; existing workflows keep working.',
 			},
 			/* ---------------- Resources (checkboxes) ---------------- */
 			{
