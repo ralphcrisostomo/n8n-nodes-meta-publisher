@@ -54,10 +54,22 @@ export const OPS = {
 			maxMs: a.maxWaitSec * 1000,
 		});
 		const finished = status?.status_code === 'FINISHED';
-		await sleep(jitter(10000));
-		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
-		await sleep(jitter(10000));
-		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
+		let pub = null;
+		let permalink = null;
+		// Note: Prevent stopping the flow on error. Usually photo is published already
+		try {
+			await sleep(jitter(10000));
+			pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+		} catch (e) {
+			console.log('IG PUBLISH ERROR', e);
+		}
+		try {
+			await sleep(jitter(10000));
+			permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
+		} catch (e) {
+			console.log('IG PERMALINK ERROR', e);
+		}
+
 		return {
 			id: 'instagram-image',
 			platform: 'instagram',

@@ -232,7 +232,7 @@ export async function fbGetPostPermalink(
 			);
 			return res?.url;
 		},
-		{ tries: 10, delayMs: 5000 },
+		{ tries: 8, delayMs: 5000 },
 	);
 }
 
@@ -251,7 +251,7 @@ export async function fbGetVideoStatus(
 				{},
 			);
 		},
-		{ tries: 10, delayMs: 5000 },
+		{ tries: 8, delayMs: 5000 },
 	);
 }
 
@@ -272,6 +272,6 @@ export async function fbGetPermalink(
 			const permalink = res?.permalink_url;
 			return permalink.startsWith('/') ? `https://www.facebook.com${permalink}` : permalink;
 		},
-		{ tries: 10, delayMs: 5000 },
+		{ tries: 8, delayMs: 5000 },
 	);
 }
