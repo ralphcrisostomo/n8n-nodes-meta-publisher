@@ -12,8 +12,13 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 #### Workflows
 ![Meta Publisher Workflow](docs/images/workflow.png)
 
-#### Operations
+#### Nodes and Operations
+![Meta Publisher Operations](docs/images/nodes.png) 
 ![Meta Publisher Operations](docs/images/operations.png)
+
+#### JSON Generator Output
+![Meta Publisher Operations](docs/images/json-generator-output.png)
+
 
 ## Table of contents
 
