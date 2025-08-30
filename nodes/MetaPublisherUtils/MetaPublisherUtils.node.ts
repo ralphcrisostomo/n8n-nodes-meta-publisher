@@ -41,7 +41,7 @@ const IG_REEL_RATIO_HINT =
 export class MetaPublisherUtils implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Meta Publisher Utils',
-		version: 2, // bump version
+		version: 1, // bump version
 
 		description:
 			'⚠️ Deprecated. Please switch to “Meta Publisher JSON Generator”. This node will be removed in a future release.',
