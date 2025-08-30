@@ -33,7 +33,7 @@ export class MetaPublisherBinaryUpload implements INodeType {
 				type: 'notice',
 				default: '',
 				description:
-					'🚧 This node is a proposal. If you want binary upload support, please visit the GitHub repo and give it a star to show interest. 👉 [View on GitHub](https://github.com/ralphcrisostomo/n8n-nodes-meta-publisher)',
+					'🚧 This node is a proposal. If you want binary upload support, please visit the GitHub repo and give it a star to show interest. 👉 https://github.com/ralphcrisostomo/n8n-nodes-meta-publisher',
 			},
 		],
 	};
