@@ -2,7 +2,7 @@ import type { INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-wo
 
 export class MetaPublisherBinaryUpload implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Meta Publisher Binary Upload (Preview)',
+		displayName: 'Meta Publisher Binary Upload',
 		name: 'metaPublisherBinaryUpload',
 		icon: { light: 'file:MetaPublisher.svg', dark: 'file:MetaPublisher.svg' },
 		group: ['transform'],
@@ -18,9 +18,9 @@ export class MetaPublisherBinaryUpload implements INodeType {
 				location: 'ndv',
 			},
 		],
-
+		subtitle: '⚠️ Preview',
 		defaults: {
-			name: 'MetaPublisher Binary Upload',
+			name: 'Meta Publisher Binary Upload',
 		},
 		inputs: ['main'] as NodeConnectionType[],
 		outputs: ['main'] as NodeConnectionType[],
