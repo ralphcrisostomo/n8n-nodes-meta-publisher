@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-meta-publisher",
-	"version": "0.13.1",
+	"version": "0.13.2",
 	"description": "Publish to Instagram, Facebook Pages, and Threads (images, videos, reels, stories, carousels) via Meta Graph APIs.",
 	"keywords": [
 		"n8n-community-node-package",
@@ -48,7 +48,7 @@
 		"nodes": [
 			"dist/nodes/MetaPublisher/MetaPublisher.node.js",
 			"dist/nodes/MetaPublisherUtils/MetaPublisherUtils.node.js",
-			"dist/nodes/MetaPublisherJsonGenerator.node/MetaPublisherJsonGenerator.node.node.js",
+			"dist/nodes/MetaPublisherJsonGenerator.node/MetaPublisherJsonGenerator.node.js",
 			"dist/nodes/MetaPublisherBinaryUpload/MetaPublisherBinaryUpload.node.js"
 		]
 	},
