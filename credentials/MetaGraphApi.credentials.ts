@@ -13,7 +13,7 @@ export class MetaGraphApi implements ICredentialType {
 			default: '',
 			required: true,
 			description:
-				'Page/IG/Threads access token. If OAuth2 is also configured, OAuth2 takes precedence.',
+				'Page/IG/Threads access token',
 		},
 	];
 }

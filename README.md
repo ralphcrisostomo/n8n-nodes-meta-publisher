@@ -2,7 +2,6 @@
 
 # n8n-nodes-meta-publisher
 
-
 Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — including **Images, Videos, Reels, Stories, and Carousels** — with a single, DRY node.
 
 > Built from the official **n8n community node starter** structure so you can develop, lint, and ship confidently.&#x20;
@@ -10,15 +9,17 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 ---
 
 #### Workflows
+
 ![Meta Publisher Workflow](docs/images/workflow.png)
 
 #### Nodes and Operations
-![Meta Publisher Operations](docs/images/nodes.png) 
+
+![Meta Publisher Operations](docs/images/nodes.png)
 ![Meta Publisher Operations](docs/images/operations.png)
 
 #### JSON Generator Output
-![Meta Publisher Operations](docs/images/json-generator-output.png)
 
+![Meta Publisher Operations](docs/images/json-generator-output.png)
 
 ## Table of contents
 
