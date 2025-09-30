@@ -413,6 +413,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 					if (storyVideoUrl || videoUrl || includeExamples) {
 						push(
 							{
+								id: 'instagram-story-video',
 								resource: 'instagram',
 								operation: PUBLISH_STORY,
 								igUserId,
@@ -431,6 +432,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 					if (storyImageUrl || imageUrl || includeExamples) {
 						push(
 							{
+								id: 'instagram-story-image',
 								resource: 'instagram',
 								operation: PUBLISH_STORY,
 								igUserId,
@@ -452,6 +454,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (igOps.includes(PUBLISH_IMAGE) && (feedImageUrl || imageUrl || includeExamples)) {
 					push(
 						{
+							id: 'instagram-image',
 							resource: 'instagram',
 							operation: PUBLISH_IMAGE,
 							igUserId,
@@ -469,6 +472,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (igOps.includes(PUBLISH_VIDEO) && (videoUrl || includeExamples)) {
 					push(
 						{
+							id: 'instagram-video',
 							resource: 'instagram',
 							operation: PUBLISH_VIDEO,
 							igUserId,
@@ -485,6 +489,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (igOps.includes(PUBLISH_REEL) && (reelVideoUrl || includeExamples)) {
 					push(
 						{
+							id: 'instagram-reel',
 							resource: 'instagram',
 							operation: PUBLISH_REEL,
 							igUserId,
@@ -511,6 +516,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 					if (items.length >= 2) {
 						push(
 							{
+								id: 'instagram-carousel',
 								resource: 'instagram',
 								operation: PUBLISH_CAROUSEL,
 								igUserId,
@@ -546,6 +552,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (fbOps.includes(PUBLISH_FB_PHOTO) && (imageUrl || includeExamples)) {
 					push(
 						{
+							id: 'facebook-image',
 							resource: 'facebook',
 							operation: PUBLISH_FB_PHOTO,
 							pageId,
@@ -560,6 +567,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (fbOps.includes(PUBLISH_FB_VIDEO) && (videoUrl || includeExamples)) {
 					push(
 						{
+							id: 'facebook-video',
 							resource: 'facebook',
 							operation: PUBLISH_FB_VIDEO,
 							pageId,
@@ -575,6 +583,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (fbOps.includes(PUBLISH_FB_STORY_PHOTO) && (imageUrl || includeExamples)) {
 					push(
 						{
+							id: 'facebook-story-image',
 							resource: 'facebook',
 							operation: PUBLISH_FB_STORY_PHOTO,
 							pageId,
@@ -588,6 +597,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (fbOps.includes(PUBLISH_FB_STORY_VIDEO) && (videoUrl || includeExamples)) {
 					push(
 						{
+							id: 'facebook-story-video',
 							resource: 'facebook',
 							operation: PUBLISH_FB_STORY_VIDEO,
 							pageId,
@@ -601,6 +611,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (fbOps.includes(PUBLISH_FB_REEL) && (videoUrl || includeExamples)) {
 					push(
 						{
+							id: 'facebook-reel',
 							resource: 'facebook',
 							operation: PUBLISH_FB_REEL,
 							pageId,
@@ -632,6 +643,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (thOps.includes(THREADS_PUBLISH_TEXT) && (text || includeExamples)) {
 					push(
 						{
+							id: 'threads-text',
 							resource: 'threads',
 							operation: THREADS_PUBLISH_TEXT,
 							thUserId,
@@ -645,6 +657,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (thOps.includes(THREADS_PUBLISH_IMAGE) && (imageUrl || includeExamples)) {
 					push(
 						{
+							id: 'threads-image',
 							resource: 'threads',
 							operation: THREADS_PUBLISH_IMAGE,
 							thUserId,
@@ -660,6 +673,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				if (thOps.includes(THREADS_PUBLISH_VIDEO) && (videoUrl || includeExamples)) {
 					push(
 						{
+							id: 'threads-video',
 							resource: 'threads',
 							operation: THREADS_PUBLISH_VIDEO,
 							thUserId,
@@ -694,6 +708,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 					if (items.length >= 2) {
 						push(
 							{
+								id: 'threads-carousel',
 								resource: 'threads',
 								operation: THREADS_PUBLISH_CAROUSEL,
 								thUserId,
