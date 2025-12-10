@@ -140,7 +140,50 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				type: 'string',
 				default: '',
 			},
-
+			{
+				displayName: 'User Tags',
+				name: 'userTags',
+				type: 'fixedCollection',
+				typeOptions: { multipleValues: true },
+				default: {},
+				displayOptions: {
+					show: {
+						resources: ['instagram'],
+						igOps: [PUBLISH_IMAGE, PUBLISH_VIDEO, PUBLISH_REEL], // no story
+					},
+				},
+				options: [
+					{
+						displayName: 'Tag',
+						name: 'tag',
+						values: [
+							{
+								displayName: 'User ID',
+								name: 'userId',
+								type: 'string',
+								required: true,
+								default: '',
+							},
+							{
+								displayName: 'X Position (0–1)',
+								name: 'x',
+								type: 'number',
+								typeOptions: { minValue: 0, maxValue: 1 },
+								required: true,
+								default: '',
+							},
+							{
+								displayName: 'Y Position (0–1)',
+								name: 'y',
+								type: 'number',
+								typeOptions: { minValue: 0, maxValue: 1 },
+								required: true,
+								default: '',
+							},
+						],
+					},
+				],
+			},
 			// IG Feed: Image
 			{
 				displayName: 'Feed Image URL (4:5 to 1.91:1)',
@@ -236,6 +279,44 @@ export class MetaPublisherJsonGenerator implements INodeType {
 							},
 							{ displayName: 'URL', name: 'url', type: 'string', default: '' },
 							{ displayName: 'Caption (Optional)', name: 'caption', type: 'string', default: '' },
+							{
+								displayName: 'User Tags',
+								name: 'userTags',
+								type: 'fixedCollection',
+								typeOptions: { multipleValues: true },
+								default: {},
+								options: [
+									{
+										displayName: 'Tag',
+										name: 'tag',
+										values: [
+											{
+												displayName: 'User ID',
+												name: 'userId',
+												type: 'string',
+												required: true,
+												default: '',
+											},
+											{
+												displayName: 'X',
+												name: 'x',
+												type: 'number',
+												typeOptions: { minValue: 0, maxValue: 1 },
+												required: true,
+												default: '',
+											},
+											{
+												displayName: 'Y',
+												name: 'y',
+												type: 'number',
+												typeOptions: { minValue: 0, maxValue: 1 },
+												required: true,
+												default: '',
+											},
+										],
+									},
+								],
+							},
 						],
 					},
 				],
@@ -384,6 +465,12 @@ export class MetaPublisherJsonGenerator implements INodeType {
 			const imageUrl = this.getNodeParameter('imageUrl', i, '') as string;
 			const videoUrl = this.getNodeParameter('videoUrl', i, '') as string;
 			const caption = this.getNodeParameter('caption', i, '') as string;
+			const normalizeTags = (raw: any) => {
+				if (!raw) return [];
+				if (Array.isArray(raw)) return raw; // JSON input mode
+				if (Array.isArray(raw.tag)) return raw.tag; // UI mode
+				return [];
+			};
 
 			/* ---------------- Instagram ---------------- */
 			if (resources.includes('instagram')) {
@@ -462,6 +549,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 								? feedImageUrl || imageUrl || EXAMPLE_IMAGE_URL
 								: feedImageUrl || imageUrl,
 							caption: includeExamples ? caption || EXAMPLE_CAPTION : caption,
+							userTags: normalizeTags(this.getNodeParameter('userTags', i, {})), // ← ADD THIS
 							autoPublish: igAutoPublish,
 						},
 						true,
@@ -479,6 +567,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 							mediaUrl: videoUrl || EXAMPLE_VIDEO_URL,
 							caption: includeExamples ? caption || EXAMPLE_CAPTION : caption,
 							coverUrl: includeExamples ? coverUrl || EXAMPLE_IMAGE_URL : coverUrl,
+							userTags: normalizeTags(this.getNodeParameter('userTags', i, {})), // ← ADD
 							autoPublish: igAutoPublish,
 						},
 						true,
@@ -497,6 +586,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 							caption: includeExamples ? caption || EXAMPLE_CAPTION : caption,
 							thumbOffsetMs,
 							shareToFeed,
+							userTags: normalizeTags(this.getNodeParameter('userTags', i, {})), // ← ADD
 							autoPublish: igAutoPublish,
 						},
 						true,
@@ -506,11 +596,14 @@ export class MetaPublisherJsonGenerator implements INodeType {
 
 				if (igOps.includes(PUBLISH_CAROUSEL)) {
 					const items = igItemsCol.length
-						? igItemsCol
+						? igItemsCol.map((it: any) => ({
+								...it,
+								userTags: normalizeTags(it.userTags), // ← ADD HERE
+							}))
 						: includeExamples
 							? [
-									{ type: 'image', url: EXAMPLE_IMAGE_URL, caption: EXAMPLE_CAPTION },
-									{ type: 'video', url: EXAMPLE_VIDEO_URL, caption: EXAMPLE_CAPTION },
+									{ type: 'image', url: EXAMPLE_IMAGE_URL, caption: EXAMPLE_CAPTION, userTags: [] },
+									{ type: 'video', url: EXAMPLE_VIDEO_URL, caption: EXAMPLE_CAPTION, userTags: [] },
 								]
 							: [];
 					if (items.length >= 2) {
