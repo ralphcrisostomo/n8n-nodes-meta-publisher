@@ -36,6 +36,7 @@ export const OPS = {
 			igUserId: string;
 			mediaUrl: string;
 			caption?: string;
+			userTags?: { userId: string; x: number; y: number }[]; // ← ADD THIS
 			pollSec: number;
 			maxWaitSec: number;
 			autoPublish: boolean;
@@ -46,7 +47,9 @@ export const OPS = {
 			igUserId: a.igUserId,
 			url: a.mediaUrl,
 			caption: a.caption,
+			userTags: a.userTags, // ← Keep camelCase
 		});
+
 		const status = await pollUntil({
 			check: () => igGetStatus.call(ctx, id),
 			isDone: (r: any) => ['FINISHED', 'ERROR'].includes(r?.status_code ?? ''),
@@ -90,6 +93,7 @@ export const OPS = {
 			mediaUrl: string;
 			caption?: string;
 			coverUrl?: string;
+			userTags?: { userId: string; x: number; y: number }[]; // ← ADDED
 			pollSec: number;
 			maxWaitSec: number;
 			autoPublish: boolean;
@@ -101,18 +105,26 @@ export const OPS = {
 			url: a.mediaUrl,
 			caption: a.caption,
 			coverUrl: a.coverUrl,
+			userTags: a.userTags, // ← ADDED (camelCase)
 		});
+
 		const status = await pollUntil({
 			check: () => igGetStatus.call(ctx, id),
 			isDone: (r: any) => ['FINISHED', 'ERROR'].includes(r?.status_code ?? ''),
 			intervalMs: a.pollSec * 1000,
 			maxMs: a.maxWaitSec * 1000,
 		});
+
 		const finished = status?.status_code === 'FINISHED';
+
 		await sleep(jitter(5000));
+
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+
 		await sleep(jitter(5000));
+
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
+
 		return {
 			id: 'instagram-video',
 			platform: 'instagram',
@@ -134,6 +146,7 @@ export const OPS = {
 			caption?: string;
 			thumbOffsetMs?: number;
 			shareToFeed?: boolean;
+			userTags?: { userId: string; x: number; y: number }[]; // ← ADDED
 			pollSec: number;
 			maxWaitSec: number;
 			autoPublish: boolean;
@@ -146,18 +159,26 @@ export const OPS = {
 			caption: a.caption,
 			thumbOffsetMs: a.thumbOffsetMs,
 			shareToFeed: a.shareToFeed,
+			userTags: a.userTags, // ← ADDED (camelCase)
 		});
+
 		const status = await pollUntil({
 			check: () => igGetStatus.call(ctx, id),
 			isDone: (r: any) => ['FINISHED', 'ERROR'].includes(r?.status_code ?? ''),
 			intervalMs: a.pollSec * 1000,
 			maxMs: a.maxWaitSec * 1000,
 		});
+
 		const finished = status?.status_code === 'FINISHED';
+
 		await sleep(jitter(5000));
+
 		const pub = a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, id) : null;
+
 		await sleep(jitter(5000));
+
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
+
 		return {
 			id: 'instagram-reel',
 			platform: 'instagram',
@@ -226,25 +247,45 @@ export const OPS = {
 		},
 	): Promise<PublishResult> {
 		if (a.items.length < 2 || a.items.length > 10) throw new Error('Carousel requires 2–10 items');
+
 		// 1) Create child containers
 		const childIds: string[] = [];
+
 		for (const it of a.items) {
+			// Normalize userTags for each item (UI + JSON compatible)
+			const rawTags = (it as any).userTags ?? it.userTags ?? {};
+			const userTags = Array.isArray(rawTags?.tag)
+				? rawTags.tag
+				: Array.isArray(rawTags)
+					? rawTags
+					: [];
+
 			const child = await igCreateContainer(
 				ctx,
 				i,
 				it.type === 'image'
-					? { kind: 'CAROUSEL_CHILD_IMAGE', igUserId: a.igUserId, url: it.url, caption: it.caption }
+					? {
+							kind: 'CAROUSEL_CHILD_IMAGE',
+							igUserId: a.igUserId,
+							url: it.url,
+							caption: it.caption,
+							userTags, // ← ADDED
+						}
 					: {
 							kind: 'CAROUSEL_CHILD_VIDEO',
 							igUserId: a.igUserId,
 							url: it.url,
 							caption: it.caption,
+							userTags, // ← ADDED (IG accepts this)
 						},
 			);
+
 			childIds.push(child);
 		}
-		// 2) Wait for every child to be FINISHED (videos can take time)
+
+		// 2) Wait for every child to be FINISHED
 		const childStatuses: Record<string, 'IN_PROGRESS' | 'FINISHED' | 'ERROR' | 'UNKNOWN'> = {};
+
 		for (const childId of childIds) {
 			const st = await pollUntil({
 				check: () => igGetStatus.call(ctx, childId),
@@ -252,38 +293,47 @@ export const OPS = {
 				intervalMs: a.pollSec * 1000,
 				maxMs: a.maxWaitSec * 1000,
 			});
+
 			const code = (st?.status_code ?? 'UNKNOWN') as
 				| 'IN_PROGRESS'
 				| 'FINISHED'
 				| 'ERROR'
 				| 'UNKNOWN';
+
 			childStatuses[childId] = code;
 
 			if (code !== 'FINISHED') {
-				// Do NOT create the parent if any child failed/never finished
 				throw new Error(`Carousel child not ready: ${childId} status=${code}`);
 			}
 		}
-		// 3) Create parent container
+
+		// 3) Create parent container (does NOT take tags)
 		const parentId = await igCreateContainer(ctx, i, {
 			kind: 'CAROUSEL_PARENT',
 			igUserId: a.igUserId,
 			children: childIds,
 			caption: a.caption,
 		});
-		// 4) Poll parent then (optionally) publish
+
+		// 4) Poll parent, then publish
 		const status = await pollUntil({
 			check: () => igGetStatus.call(ctx, parentId),
 			isDone: (r: any) => ['FINISHED', 'ERROR'].includes(r?.status_code ?? ''),
 			intervalMs: a.pollSec * 1000,
 			maxMs: a.maxWaitSec * 1000,
 		});
+
 		const finished = status?.status_code === 'FINISHED';
+
 		await sleep(jitter(5000));
+
 		const pub =
 			a.autoPublish && finished ? await igPublish.call(ctx, i, a.igUserId, parentId) : null;
+
 		await sleep(jitter(5000));
+
 		const permalink = pub && pub.id ? await igGetPermalink.call(ctx, pub.id) : null;
+
 		return {
 			id: 'instagram-carousel',
 			platform: 'instagram',

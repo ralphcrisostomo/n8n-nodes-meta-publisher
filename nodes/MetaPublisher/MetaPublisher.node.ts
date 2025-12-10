@@ -231,6 +231,48 @@ export class MetaPublisher implements INodeType {
 				},
 			},
 			{
+				displayName: 'User Tags',
+				name: 'userTags',
+				type: 'fixedCollection',
+				typeOptions: { multipleValues: true },
+				default: {},
+				description: 'Tag Instagram users on the image',
+				displayOptions: {
+					show: { inputSource: ['fields'], resource: ['instagram'], operation: [PUBLISH_IMAGE] },
+				},
+				options: [
+					{
+						displayName: 'Tag',
+						name: 'tag',
+						values: [
+							{
+								displayName: 'User ID',
+								name: 'userId',
+								type: 'string',
+								required: true,
+								default: '',
+							},
+							{
+								displayName: 'X Position (0–1)',
+								name: 'x',
+								type: 'number',
+								typeOptions: { minValue: 0, maxValue: 1 },
+								required: true,
+								default: '',
+							},
+							{
+								displayName: 'Y Position (0–1)',
+								name: 'y',
+								type: 'number',
+								typeOptions: { minValue: 0, maxValue: 1 },
+								required: true,
+								default: '',
+							},
+						],
+					},
+				],
+			},
+			{
 				displayName: 'Caption',
 				name: 'caption',
 				type: 'string',
@@ -659,44 +701,60 @@ export class MetaPublisher implements INodeType {
 
 					switch (operation) {
 						case PUBLISH_IMAGE: {
+							// Must always normalize user tags into an array
+							const rawTags = job.userTags ?? (this.getNodeParameter('userTags', i, {}) as any);
+							const userTags = Array.isArray(rawTags?.tag) ? rawTags.tag : [];
+
 							const mediaUrl = job.mediaUrl ?? (this.getNodeParameter('mediaUrl', i) as string);
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
+
 							return OPS.publishImage(this, i, {
 								igUserId,
 								mediaUrl,
 								caption,
+								userTags,
 								pollSec,
 								maxWaitSec,
 								autoPublish,
 							});
 						}
 						case PUBLISH_VIDEO: {
+							const rawTags = job.userTags ?? (this.getNodeParameter('userTags', i, {}) as any);
+							const userTags = Array.isArray(rawTags?.tag) ? rawTags.tag : [];
+
 							const mediaUrl = job.mediaUrl ?? (this.getNodeParameter('mediaUrl', i) as string);
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
 							const coverUrl = job.coverUrl ?? (this.getNodeParameter('coverUrl', i, '') as string);
+
 							return OPS.publishVideo(this, i, {
 								igUserId,
 								mediaUrl,
 								caption,
 								coverUrl,
+								userTags, // ← ADD THIS
 								pollSec,
 								maxWaitSec,
 								autoPublish,
 							});
 						}
 						case PUBLISH_REEL: {
+							const rawTags = job.userTags ?? (this.getNodeParameter('userTags', i, {}) as any);
+							const userTags = Array.isArray(rawTags?.tag) ? rawTags.tag : [];
+
 							const videoUrl = job.videoUrl ?? (this.getNodeParameter('videoUrl', i) as string);
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
 							const thumbOffsetMs =
 								job.thumbOffsetMs ?? (this.getNodeParameter('thumbOffsetMs', i, 0) as number);
 							const shareToFeed =
 								job.shareToFeed ?? (this.getNodeParameter('shareToFeed', i, true) as boolean);
+
 							return OPS.publishReel(this, i, {
 								igUserId,
 								videoUrl,
 								caption,
 								thumbOffsetMs,
 								shareToFeed,
+								userTags, // ← ADD THIS
 								pollSec,
 								maxWaitSec,
 								autoPublish,
@@ -721,9 +779,17 @@ export class MetaPublisher implements INodeType {
 							const itemsCol =
 								job.items ?? (this.getNodeParameter('items', i, {}) as any).item ?? [];
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);
+
+							// Extract user tags per item (if supported)
+							const normalizedItems = itemsCol.map((item: any, idx: number) => {
+								const raw = item.userTags ?? (this.getNodeParameter('userTags', i, {}) as any);
+								const userTags = Array.isArray(raw?.tag) ? raw.tag : [];
+								return { ...item, userTags };
+							});
+
 							return OPS.publishCarousel(this, i, {
 								igUserId,
-								items: itemsCol,
+								items: normalizedItems,
 								caption,
 								pollSec,
 								maxWaitSec,

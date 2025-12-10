@@ -18,7 +18,6 @@ export async function apiRequest(
 ): Promise<any> {
 	const url = isAbsolute(endpoint) ? endpoint : `${GRAPH_BASE}${endpoint}`;
 	const options: any = { method, url, qs, body, json: true };
-
 	try {
 		const cred: any = await (thisArg.getCredentials as any)('metaGraphApi');
 		if (cred?.accessToken) {
