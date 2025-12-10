@@ -82,7 +82,7 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 
 ### Community Nodes (recommended for users)
 
-- Install `@ralphcrisostomo/n8n-node-meta-publisher` via n8n _Community Nodes_.
+- Install `n8n-node-meta-publisher` via n8n _Community Nodes_.
 
 ![Meta Publisher workflow](docs/images/community-nodes.png)
 

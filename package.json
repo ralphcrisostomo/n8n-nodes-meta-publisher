@@ -1,6 +1,6 @@
 {
-	"name": "@ralphcrisostomo/n8n-nodes-meta-publisher",
-	"version": "0.14.0",
+	"name": "n8n-nodes-meta-publisher",
+	"version": "0.14.1",
 	"description": "Publish to Instagram, Facebook Pages, and Threads (images, videos, reels, stories, carousels) via Meta Graph APIs.",
 	"keywords": [
 		"n8n-community-node-package",
