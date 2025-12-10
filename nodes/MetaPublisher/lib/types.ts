@@ -9,8 +9,9 @@ export type ChildStatus = IgStatusCode | ThreadsStatusCode | 'UNKNOWN';
 export type CarouselItem = {
 	type: 'image' | 'video';
 	url: string;
-	altText?: string;
 	caption?: string;
+	altText?: string;
+	userTags?: { userId: string; x: number; y: number }[];
 };
 
 export type PublishResult = {

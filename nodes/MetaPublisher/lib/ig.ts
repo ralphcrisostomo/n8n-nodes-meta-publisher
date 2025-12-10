@@ -7,46 +7,61 @@ export type IgStatus = { status_code?: IgStatusCode };
 
 export type IgCreateArgs =
 	| {
-			kind: 'IMAGE';
-			igUserId: string;
-			url: string;
-			caption?: string;
-			userTags?: { userId: string; x: number; y: number }[];
-	  }
+	kind: 'IMAGE';
+	igUserId: string;
+	url: string;
+	caption?: string;
+	userTags?: { userId: string; x: number; y: number }[];
+}
 	| {
-			kind: 'VIDEO';
-			igUserId: string;
-			url: string;
-			caption?: string;
-			coverUrl?: string;
-			userTags?: { userId: string; x: number; y: number }[];
-	  }
+	kind: 'VIDEO';
+	igUserId: string;
+	url: string;
+	caption?: string;
+	coverUrl?: string;
+	userTags?: { userId: string; x: number; y: number }[];
+}
 	| {
-			kind: 'REELS';
-			igUserId: string;
-			url: string;
-			caption?: string;
-			thumbOffsetMs?: number;
-			shareToFeed?: boolean;
-			userTags?: { userId: string; x: number; y: number }[];
-	  }
-	| { kind: 'STORY_IMAGE'; igUserId: string; url: string; caption?: string }
-	| { kind: 'STORY_VIDEO'; igUserId: string; url: string; caption?: string }
-	| { kind: 'CAROUSEL_PARENT'; igUserId: string; children: string[]; caption?: string }
+	kind: 'REELS';
+	igUserId: string;
+	url: string;
+	caption?: string;
+	thumbOffsetMs?: number;
+	shareToFeed?: boolean;
+	userTags?: { userId: string; x: number; y: number }[];
+}
 	| {
-			kind: 'CAROUSEL_CHILD_IMAGE';
-			igUserId: string;
-			url: string;
-			caption?: string;
-			userTags?: { userId: string; x: number; y: number }[];
-	  }
+	kind: 'STORY_IMAGE';
+	igUserId: string;
+	url: string;
+	caption?: string;
+}
 	| {
-			kind: 'CAROUSEL_CHILD_VIDEO';
-			igUserId: string;
-			url: string;
-			caption?: string;
-			userTags?: { userId: string; x: number; y: number }[];
-	  };
+	kind: 'STORY_VIDEO';
+	igUserId: string;
+	url: string;
+	caption?: string;
+}
+	| {
+	kind: 'CAROUSEL_PARENT';
+	igUserId: string;
+	children: string[];
+	caption?: string;
+}
+	| {
+	kind: 'CAROUSEL_CHILD_IMAGE';
+	igUserId: string;
+	url: string;
+	caption?: string;
+	userTags?: { userId: string; x: number; y: number }[];
+}
+	| {
+	kind: 'CAROUSEL_CHILD_VIDEO';
+	igUserId: string;
+	url: string;
+	caption?: string;
+	userTags?: { userId: string; x: number; y: number }[];
+};
 
 export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: IgCreateArgs) {
 	const base = async (body: Record<string, any>) => {
@@ -63,13 +78,23 @@ export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: Ig
 
 	// Convert camelCase userTags to Instagram API user_tags format
 	const applyUserTags = (body: any) => {
-		if (a.userTags?.length) {
-			body.user_tags = a.userTags.map((t: any) => ({
-				user_id: t.userId,
-				x: t.x,
-				y: t.y,
-			}));
+		// Only kinds that support userTags
+		if (
+			a.kind === 'IMAGE' ||
+			a.kind === 'VIDEO' ||
+			a.kind === 'REELS' ||
+			a.kind === 'CAROUSEL_CHILD_IMAGE' ||
+			a.kind === 'CAROUSEL_CHILD_VIDEO'
+		) {
+			if (a.userTags?.length) {
+				body.user_tags = a.userTags.map((t) => ({
+					user_id: t.userId,
+					x: t.x,
+					y: t.y,
+				}));
+			}
 		}
+
 		return body;
 	};
 
