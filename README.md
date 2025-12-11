@@ -269,13 +269,13 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 				"type": "image",
 				"url": "https://www.example.com/image.jpg",
 				"caption": "This is an example caption.",
-				"userTags": [{ "username": "17841400000000001", "x": 0.1, "y": 0.8 }]
+				"userTags": [{ "username": "someuser", "x": 0.1, "y": 0.8 }]
 			},
 			{
 				"type": "video",
 				"url": "https://www.example.com/video.mp4",
 				"caption": "This is an example caption.",
-				"userTags": [{ "username": "17841400000000001", "x": 0.1, "y": 0.8 }]
+				"userTags": [{ "username": "someuser", "x": 0.1, "y": 0.8 }]
 			}
 		],
 		"caption": "This is an example caption.",
@@ -462,7 +462,7 @@ The Utils node will output something like:
 			"igUserId": "1789...",
 			"mediaUrl": "https://example.com/image.jpg",
 			"caption": "Hello from n8n",
-			"userTags": [{ "username": "17841400000000001", "x": 0.1, "y": 0.8 }],
+			"userTags": [{ "username": "someuser", "x": 0.1, "y": 0.8 }],
 			"autoPublish": true
 		},
 		{
@@ -471,7 +471,7 @@ The Utils node will output something like:
 			"igUserId": "1789...",
 			"videoUrl": "https://example.com/reel.mp4",
 			"caption": "Hello from n8n",
-			"userTags": [{ "username": "17841400000000001", "x": 0.1, "y": 0.8 }],
+			"userTags": [{ "username": "someuser", "x": 0.1, "y": 0.8 }],
 			"thumbOffsetMs": 0,
 			"shareToFeed": true,
 			"autoPublish": true
@@ -534,7 +534,7 @@ Upstream nodes (e.g., **Set**, **Spreadsheet File**, **HTTP Request**) can provi
 	"igUserId": "1789...",
 	"mediaUrl": "https://example.com/photo.jpg",
 	"caption": "My IG post",
-	"userTags": [{ "username": "17841400000000001", "x": 0.1, "y": 0.8 }],
+	"userTags": [{ "username": "someuser", "x": 0.1, "y": 0.8 }],
 	"autoPublish": true
 }
 ```
