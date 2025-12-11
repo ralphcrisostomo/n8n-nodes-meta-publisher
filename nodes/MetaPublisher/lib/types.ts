@@ -11,7 +11,7 @@ export type CarouselItem = {
 	url: string;
 	caption?: string;
 	altText?: string;
-	userTags?: { userId: string; x: number; y: number }[];
+	userTags?: { username: string; x: number; y: number }[];
 };
 
 export type PublishResult = {

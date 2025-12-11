@@ -11,7 +11,7 @@ export type IgCreateArgs =
 	igUserId: string;
 	url: string;
 	caption?: string;
-	userTags?: { userId: string; x: number; y: number }[];
+	userTags?: { username: string; x: number; y: number }[];
 }
 	| {
 	kind: 'VIDEO';
@@ -19,7 +19,7 @@ export type IgCreateArgs =
 	url: string;
 	caption?: string;
 	coverUrl?: string;
-	userTags?: { userId: string; x: number; y: number }[];
+	userTags?: { username: string; x: number; y: number }[];
 }
 	| {
 	kind: 'REELS';
@@ -28,7 +28,7 @@ export type IgCreateArgs =
 	caption?: string;
 	thumbOffsetMs?: number;
 	shareToFeed?: boolean;
-	userTags?: { userId: string; x: number; y: number }[];
+	userTags?: { username: string; x: number; y: number }[];
 }
 	| {
 	kind: 'STORY_IMAGE';
@@ -53,14 +53,14 @@ export type IgCreateArgs =
 	igUserId: string;
 	url: string;
 	caption?: string;
-	userTags?: { userId: string; x: number; y: number }[];
+	userTags?: { username: string; x: number; y: number }[];
 }
 	| {
 	kind: 'CAROUSEL_CHILD_VIDEO';
 	igUserId: string;
 	url: string;
 	caption?: string;
-	userTags?: { userId: string; x: number; y: number }[];
+	userTags?: { username: string; x: number; y: number }[];
 };
 
 export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: IgCreateArgs) {
@@ -88,7 +88,7 @@ export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: Ig
 		) {
 			if (a.userTags?.length) {
 				body.user_tags = a.userTags.map((t) => ({
-					user_id: t.userId,
+					username: t.username,
 					x: t.x,
 					y: t.y,
 				}));

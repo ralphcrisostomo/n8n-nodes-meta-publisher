@@ -158,8 +158,8 @@ export class MetaPublisherJsonGenerator implements INodeType {
 						name: 'tag',
 						values: [
 							{
-								displayName: 'User ID',
-								name: 'userId',
+								displayName: 'Username',
+								name: 'username',
 								type: 'string',
 								required: true,
 								default: '',
@@ -291,8 +291,8 @@ export class MetaPublisherJsonGenerator implements INodeType {
 										name: 'tag',
 										values: [
 											{
-												displayName: 'User ID',
-												name: 'userId',
+												displayName: 'Username',
+												name: 'username',
 												type: 'string',
 												required: true,
 												default: '',

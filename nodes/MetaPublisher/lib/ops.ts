@@ -36,7 +36,7 @@ export const OPS = {
 			igUserId: string;
 			mediaUrl: string;
 			caption?: string;
-			userTags?: { userId: string; x: number; y: number }[]; // ← ADD THIS
+			userTags?: { username: string; x: number; y: number }[]; // ← ADD THIS
 			pollSec: number;
 			maxWaitSec: number;
 			autoPublish: boolean;
@@ -93,7 +93,7 @@ export const OPS = {
 			mediaUrl: string;
 			caption?: string;
 			coverUrl?: string;
-			userTags?: { userId: string; x: number; y: number }[]; // ← ADDED
+			userTags?: { username: string; x: number; y: number }[]; // ← ADDED
 			pollSec: number;
 			maxWaitSec: number;
 			autoPublish: boolean;
@@ -146,7 +146,7 @@ export const OPS = {
 			caption?: string;
 			thumbOffsetMs?: number;
 			shareToFeed?: boolean;
-			userTags?: { userId: string; x: number; y: number }[]; // ← ADDED
+			userTags?: { username: string; x: number; y: number }[]; // ← ADDED
 			pollSec: number;
 			maxWaitSec: number;
 			autoPublish: boolean;
