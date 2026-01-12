@@ -275,3 +275,76 @@ export async function fbGetPermalink(
 		{ tries: 8, delayMs: 5000 },
 	);
 }
+
+
+export async function fbUploadUnpublishedPhoto(
+	ctx: IExecuteFunctions,
+	i: number,
+	args: {
+		pageAccessToken: any;
+		pageId: string;
+		imageUrl: string;
+	},
+): Promise<string> {
+	const { pageAccessToken, pageId, imageUrl } = args;
+	
+	const body = {
+		url: imageUrl,
+		published: false, // Important: ne pas publier individuellement
+	};
+	
+	const res = await apiRequest(
+		ctx,
+		'POST',
+		`/${encodeURIComponent(pageId)}/photos`,
+		{ ...pageAccessToken },
+		body,
+		i,
+	);
+	
+	if (!res?.id) {
+		throw new Error('FB photo upload failed: ' + JSON.stringify(res));
+	}
+	
+	return res.id as string;
+}
+
+
+export async function fbPublishMultiPhoto(
+	ctx: IExecuteFunctions,
+	i: number,
+	args: {
+		pageAccessToken: any;
+		pageId: string;
+		photoIds: string[];
+		message?: string;
+	},
+) {
+	const { pageAccessToken, pageId, photoIds, message } = args;
+	
+	// Créer le format attached_media requis par Facebook
+	const attachedMedia = photoIds.map((id) => ({ media_fbid: id }));
+	
+	const body: any = {
+		attached_media: attachedMedia,
+	};
+	
+	if (message) {
+		body.message = message;
+	}
+	
+	const res = await apiRequest(
+		ctx,
+		'POST',
+		`/${encodeURIComponent(pageId)}/feed`,
+		{ ...pageAccessToken },
+		body,
+		i,
+	);
+	
+	if (!res?.id) {
+		throw new Error('FB multi-photo post failed: ' + JSON.stringify(res));
+	}
+	
+	return res;
+}
