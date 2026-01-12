@@ -6,6 +6,7 @@ export const PUBLISH_STORY = 'publishStory';
 export const PUBLISH_CAROUSEL = 'publishCarousel';
 export const FACEBOOK = 'facebook';
 export const PUBLISH_FB_PHOTO = 'publishFbPhoto';
+export const PUBLISH_FB_MULTI_PHOTO = 'publishFbMultiPhoto';
 export const PUBLISH_FB_VIDEO = 'publishFbVideo';
 export const PUBLISH_FB_REEL = 'publishFbReel';
 export const PUBLISH_FB_STORY_PHOTO = 'publishFbStoryPhoto';
