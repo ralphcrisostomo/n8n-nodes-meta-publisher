@@ -15,6 +15,8 @@ import {
 	fbPublishStoryVideo,
 	fbPublishStoryPhoto,
 	fbGetPostPermalink,
+	fbUploadUnpublishedPhoto,
+	fbPublishMultiPhoto,
 } from './fb';
 import {
 	thCreateContainer,
@@ -560,6 +562,69 @@ export const OPS = {
 		};
 	},
 
+
+	async publishFbMultiPhoto(
+	ctx: IExecuteFunctions,
+	i: number,
+	a: {
+		pageId: string;
+		imageUrls: string[];
+		message?: string;
+	},
+): Promise<PublishResult> {
+	// Validation du nombre d'images
+	if (a.imageUrls.length < 2) {
+		throw new Error('Multi-photo requires at least 2 images');
+	}
+	if (a.imageUrls.length > 10) {
+		throw new Error('Multi-photo supports maximum 10 images');
+	}
+	
+	// Obtenir le page access token
+	const pageAccessToken = await fbGetPageAccessToken(ctx, i, {
+		pageId: a.pageId,
+	});
+	
+	// Étape 1: Upload de chaque photo individuellement
+	const photoIds: string[] = [];
+	for (const imageUrl of a.imageUrls) {
+		await sleep(jitter(1000)); // Petit délai entre chaque upload
+		const photoId = await fbUploadUnpublishedPhoto(ctx, i, {
+			pageAccessToken,
+			pageId: a.pageId,
+			imageUrl,
+		});
+		photoIds.push(photoId);
+	}
+	
+	// Étape 2: Créer le post avec toutes les photos attachées
+	await sleep(jitter(2000));
+	const publishResult = await fbPublishMultiPhoto(ctx, i, {
+		pageAccessToken,
+		pageId: a.pageId,
+		photoIds,
+		message: a.message,
+	});
+	
+	// Récupérer le permalink
+	await sleep(jitter(5000));
+	const permalink = publishResult?.id 
+		? await fbGetPermalink(ctx, publishResult.id, pageAccessToken)
+		: null;
+	
+	return {
+		id: 'facebook-multi-photo',
+		platform: 'facebook',
+		type: 'image', // ou créer un nouveau type 'multi-photo'
+		published: true,
+		publishResult,
+		photoCount: photoIds.length,
+		photoIds,
+		permalink,
+	};
+},
+	
+	
 	/* ===================== Threads ===================== */
 
 	async threadsPublishText(
