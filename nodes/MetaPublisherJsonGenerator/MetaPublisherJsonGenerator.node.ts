@@ -17,6 +17,7 @@ import {
 	EXAMPLE_VIDEO_URL,
 	PUBLISH_CAROUSEL,
 	PUBLISH_FB_PHOTO,
+	PUBLISH_FB_MULTI_PHOTO,
 	PUBLISH_FB_REEL,
 	PUBLISH_FB_STORY_PHOTO,
 	PUBLISH_FB_STORY_VIDEO,
@@ -330,6 +331,7 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				default: [],
 				options: [
 					{ name: 'Publish Photo', value: PUBLISH_FB_PHOTO },
+					{ name: 'Publish Multi-Photo', value: PUBLISH_FB_MULTI_PHOTO },
 					{ name: 'Publish Reel', value: PUBLISH_FB_REEL },
 					{ name: 'Publish Story Photo', value: PUBLISH_FB_STORY_PHOTO },
 					{ name: 'Publish Story Video', value: PUBLISH_FB_STORY_VIDEO },
@@ -357,6 +359,29 @@ export class MetaPublisherJsonGenerator implements INodeType {
 				type: 'string',
 				default: '',
 				displayOptions: { show: { fbOps: [PUBLISH_FB_VIDEO, PUBLISH_FB_REEL] } },
+			},
+			{
+				displayName: 'FB Multi-Photo URLs',
+				name: 'fbMultiPhotoUrls',
+				type: 'fixedCollection',
+				typeOptions: { multipleValues: true },
+				default: {},
+				displayOptions: { show: { fbOps: [PUBLISH_FB_MULTI_PHOTO] } },
+				options: [
+					{
+						displayName: 'Image',
+						name: 'image',
+						values: [
+							{
+								displayName: 'URL',
+								name: 'url',
+								type: 'string',
+								default: '',
+								placeholder: 'https://example.com/image.jpg',
+							},
+						],
+					},
+				],
 			},
 
 			/* ---------------- Threads ops ---------------- */
@@ -655,6 +680,33 @@ export class MetaPublisherJsonGenerator implements INodeType {
 						true,
 						'FB: pageId is required for publishFbPhoto',
 					);
+				}
+
+				if (fbOps.includes(PUBLISH_FB_MULTI_PHOTO)) {
+					const imagesCol = this.getNodeParameter('fbMultiPhotoUrls', i, {}) as any;
+					const imageUrls = (imagesCol.image || []).map((img: any) => img.url).filter(Boolean);
+					
+					if (imageUrls.length >= 2 || includeExamples) {
+						const urls = imageUrls.length >= 2 
+							? imageUrls 
+							: [EXAMPLE_IMAGE_URL, EXAMPLE_IMAGE_URL]; // Exemples si vide
+						
+						push(
+							{
+								id: 'facebook-multi-photo',
+								resource: 'facebook',
+								operation: PUBLISH_FB_MULTI_PHOTO,
+								pageId,
+								imageUrls: urls,
+								message: includeExamples ? caption || EXAMPLE_CAPTION : caption,
+							},
+							true,
+							'FB: pageId is required for publishFbMultiPhoto',
+						);
+					} else if (!skipMissing && fbOps.includes(PUBLISH_FB_MULTI_PHOTO)) {
+						const msg = 'FB: Multi-photo requires at least 2 images';
+						new NodeOperationError(this.getNode(), msg, { itemIndex: i });
+					}
 				}
 
 				if (fbOps.includes(PUBLISH_FB_VIDEO) && (videoUrl || includeExamples)) {
