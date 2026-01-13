@@ -15,14 +15,14 @@
 		"social media"
 	],
 	"license": "MIT",
-	"homepage": "https://github.com/ralphcrisostomo/n8n-nodes-meta-publisher",
+	"homepage": "https://github.com/M3hd1MM/n8n-nodes-meta-publisher",
 	"author": {
-		"name": "Ralf Crisostomo",
-		"email": "rrecrisostomo@gmail.com"
+		"name": "M3hd1MM",
+		"email": "mehdi.masrour@@gmail.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ralphcrisostomo/n8n-nodes-meta-publisher.git"
+		"url": "https://github.com/M3hd1MM/n8n-nodes-meta-publisher.git"
 	},
 	"engines": {
 		"node": ">=20.15"
