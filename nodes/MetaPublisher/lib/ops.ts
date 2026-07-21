@@ -565,9 +565,14 @@ export const OPS = {
 	async threadsPublishText(
 		ctx: IExecuteFunctions,
 		i: number,
-		a: { userId: string; text: string; pollSec: number; maxWaitSec: number },
+		a: { userId: string; text: string; topicTag?: string; pollSec: number; maxWaitSec: number },
 	): Promise<PublishResult> {
-		const id = await thCreateContainer(ctx, i, { userId: a.userId, kind: 'TEXT', text: a.text });
+		const id = await thCreateContainer(ctx, i, {
+			userId: a.userId,
+			kind: 'TEXT',
+			text: a.text,
+			topicTag: a.topicTag,
+		});
 		const st = await pollUntil({
 			check: () => thGetStatus(ctx, id),
 			isDone: (r: any) => ['FINISHED', 'PUBLISHED', 'ERROR', 'EXPIRED'].includes(r?.status ?? ''),
@@ -599,6 +604,7 @@ export const OPS = {
 			imageUrl: string;
 			text?: string;
 			altText?: string;
+			topicTag?: string;
 			pollSec: number;
 			maxWaitSec: number;
 		},
@@ -609,6 +615,7 @@ export const OPS = {
 			imageUrl: a.imageUrl,
 			text: a.text,
 			altText: a.altText,
+			topicTag: a.topicTag,
 		});
 		const st = await pollUntil({
 			check: () => thGetStatus(ctx, id),
@@ -641,6 +648,7 @@ export const OPS = {
 			videoUrl: string;
 			text?: string;
 			altText?: string;
+			topicTag?: string;
 			pollSec: number;
 			maxWaitSec: number;
 		},
@@ -651,6 +659,7 @@ export const OPS = {
 			videoUrl: a.videoUrl,
 			text: a.text,
 			altText: a.altText,
+			topicTag: a.topicTag,
 		});
 		const st = await pollUntil({
 			check: () => thGetStatus(ctx, id),
@@ -682,6 +691,7 @@ export const OPS = {
 			userId: string;
 			items: CarouselItem[];
 			text?: string;
+			topicTag?: string;
 			pollSec: number;
 			maxWaitSec: number;
 		},
@@ -720,6 +730,7 @@ export const OPS = {
 			userId: a.userId,
 			children: childIds,
 			text: a.text,
+			topicTag: a.topicTag,
 		});
 		const st = await pollUntil({
 			check: () => thGetStatus(ctx, parentId),

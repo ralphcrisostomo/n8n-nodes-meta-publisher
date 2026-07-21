@@ -72,10 +72,11 @@ export async function thCreateCarouselItem(
 export async function thCreateCarouselParent(
 	ctx: IExecuteFunctions,
 	i: number,
-	a: { userId: string; children: string[]; text?: string },
+	a: { userId: string; children: string[]; text?: string; topicTag?: string },
 ) {
 	const qs: any = { media_type: 'CAROUSEL', children: a.children.join(',') };
 	if (a.text) qs.text = a.text;
+	if (a.topicTag) qs.topic_tag = a.topicTag;
 	const res = await tPost(ctx, i, `/${encodeURIComponent(a.userId)}/threads`, qs);
 	if (!res?.id) throw new Error(`Threads create carousel parent failed: ${JSON.stringify(res)}`);
 	return res.id as string;

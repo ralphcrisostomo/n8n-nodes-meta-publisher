@@ -515,6 +515,14 @@ export class MetaPublisher implements INodeType {
 				required: true,
 				displayOptions: { show: { inputSource: ['fields'], resource: ['threads'] } },
 			},
+			{
+				displayName: 'Topic Tag',
+				name: 'topicTag',
+				type: 'string',
+				default: '',
+				description: 'Optional topic tag to categorize the post (max 50 characters)',
+				displayOptions: { show: { inputSource: ['fields'], resource: ['threads'] } },
+			},
 
 			// Threads Text
 			{
@@ -858,10 +866,18 @@ export class MetaPublisher implements INodeType {
 				case 'threads': {
 					const userId =
 						job.thUserId ?? job.userId ?? (this.getNodeParameter('thUserId', i) as string);
+					const topicTag =
+						job.topicTag ?? (this.getNodeParameter('topicTag', i, '') as string) ?? '';
 					switch (operation) {
 						case THREADS_PUBLISH_TEXT: {
 							const text = job.text ?? (this.getNodeParameter('text', i, '') as string);
-							return OPS.threadsPublishText(this, i, { userId, text, pollSec, maxWaitSec });
+							return OPS.threadsPublishText(this, i, {
+								userId,
+								text,
+								topicTag,
+								pollSec,
+								maxWaitSec,
+							});
 						}
 						case THREADS_PUBLISH_IMAGE: {
 							const imageUrl = job.imageUrl ?? (this.getNodeParameter('imageUrl', i) as string);
@@ -872,6 +888,7 @@ export class MetaPublisher implements INodeType {
 								imageUrl,
 								text,
 								altText,
+								topicTag,
 								pollSec,
 								maxWaitSec,
 							});
@@ -885,6 +902,7 @@ export class MetaPublisher implements INodeType {
 								videoUrl,
 								text,
 								altText,
+								topicTag,
 								pollSec,
 								maxWaitSec,
 							});
@@ -897,6 +915,7 @@ export class MetaPublisher implements INodeType {
 								userId,
 								items: itemsCol,
 								text,
+								topicTag,
 								pollSec,
 								maxWaitSec,
 							});
