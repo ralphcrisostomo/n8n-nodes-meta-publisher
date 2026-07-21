@@ -5,6 +5,7 @@ export const PUBLISH_REEL = 'publishReel';
 export const PUBLISH_STORY = 'publishStory';
 export const PUBLISH_CAROUSEL = 'publishCarousel';
 export const FACEBOOK = 'facebook';
+export const PUBLISH_FB_TEXT = 'publishFbText';
 export const PUBLISH_FB_PHOTO = 'publishFbPhoto';
 export const PUBLISH_FB_VIDEO = 'publishFbVideo';
 export const PUBLISH_FB_REEL = 'publishFbReel';

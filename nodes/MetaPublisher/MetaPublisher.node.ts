@@ -11,6 +11,7 @@ import { NodeOperationError } from 'n8n-workflow';
 import { OPS } from './lib/ops';
 import {
 	PUBLISH_CAROUSEL,
+	PUBLISH_FB_TEXT,
 	PUBLISH_FB_PHOTO,
 	PUBLISH_FB_REEL,
 	PUBLISH_FB_STORY_PHOTO,
@@ -123,6 +124,11 @@ export class MetaPublisher implements INodeType {
 				noDataExpression: true,
 				default: 'publishFbPhoto',
 				options: [
+					{
+						name: 'Publish Text/Link (FB Page)',
+						value: PUBLISH_FB_TEXT,
+						action: 'Publish text or link on facebook page',
+					},
 					{
 						name: 'Publish Photo (FB Page)',
 						value: 'publishFbPhoto',
@@ -441,6 +447,29 @@ export class MetaPublisher implements INodeType {
 				default: '',
 				required: true,
 				displayOptions: { show: { inputSource: ['fields'], resource: ['facebook'] } },
+			},
+
+			// FB Text/Link
+			{
+				displayName: 'Message',
+				name: 'message',
+				type: 'string',
+				default: '',
+				typeOptions: { rows: 3 },
+				description: 'Text for the post. Required unless a Link URL is provided.',
+				displayOptions: {
+					show: { inputSource: ['fields'], resource: ['facebook'], operation: [PUBLISH_FB_TEXT] },
+				},
+			},
+			{
+				displayName: 'Link URL',
+				name: 'link',
+				type: 'string',
+				default: '',
+				description: 'Optional URL to share. Facebook renders a link preview.',
+				displayOptions: {
+					show: { inputSource: ['fields'], resource: ['facebook'], operation: [PUBLISH_FB_TEXT] },
+				},
 			},
 
 			// FB Photo
@@ -813,6 +842,11 @@ export class MetaPublisher implements INodeType {
 				case 'facebook': {
 					const pageId = job.pageId ?? (this.getNodeParameter('pageId', i) as string);
 					switch (operation) {
+						case PUBLISH_FB_TEXT: {
+							const message = job.message ?? (this.getNodeParameter('message', i, '') as string);
+							const link = job.link ?? (this.getNodeParameter('link', i, '') as string);
+							return OPS.publishFbText(this, i, { pageId, message, link });
+						}
 						case PUBLISH_FB_PHOTO: {
 							const imageUrl = job.imageUrl ?? (this.getNodeParameter('imageUrl', i) as string);
 							const caption = job.caption ?? (this.getNodeParameter('caption', i, '') as string);

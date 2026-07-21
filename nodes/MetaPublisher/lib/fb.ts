@@ -21,6 +21,28 @@ export async function fbGetPageAccessToken(
 	);
 }
 
+export async function fbPublishFeed(
+	ctx: IExecuteFunctions,
+	i: number,
+	args: { pageAccessToken: any; pageId: string; message?: string; link?: string },
+) {
+	const { pageAccessToken, pageId, message, link } = args;
+	const body: any = {};
+	if (message) body.message = message;
+	if (link) body.link = link;
+	if (!message && !link) throw new Error('FB feed post requires a message or a link');
+	const res = await apiRequest(
+		ctx,
+		'POST',
+		`/${encodeURIComponent(pageId)}/feed`,
+		{ ...pageAccessToken },
+		body,
+		i,
+	);
+	if (!res?.id) throw new Error('FB feed publish failed: ' + JSON.stringify(res));
+	return res as { id: string };
+}
+
 export async function fbPublishPhoto(
 	ctx: IExecuteFunctions,
 	i: number,

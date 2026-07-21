@@ -4,6 +4,7 @@ import type { PublishResult, CarouselItem } from './types';
 
 import { igCreateContainer, igGetStatus, igPublish, igGetPermalink } from './ig';
 import {
+	fbPublishFeed,
 	fbPublishPhoto,
 	fbCreateVideo,
 	fbGetVideoStatus,
@@ -349,6 +350,30 @@ export const OPS = {
 	},
 
 	/* ===================== Facebook Pages ===================== */
+
+	async publishFbText(
+		ctx: IExecuteFunctions,
+		i: number,
+		a: { pageId: string; message?: string; link?: string },
+	): Promise<PublishResult> {
+		const pageAccessToken = await fbGetPageAccessToken(ctx, i, { pageId: a.pageId });
+		const publishResult = await fbPublishFeed(ctx, i, {
+			pageAccessToken,
+			pageId: a.pageId,
+			message: a.message,
+			link: a.link,
+		});
+		await sleep(jitter(5000));
+		const permalink = await fbGetPermalink(ctx, publishResult.id, pageAccessToken);
+		return {
+			id: 'facebook-text',
+			platform: 'facebook',
+			type: 'text',
+			publishResult,
+			published: true,
+			permalink,
+		};
+	},
 
 	async publishFbPhoto(
 		ctx: IExecuteFunctions,
