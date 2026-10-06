@@ -1,4 +1,5 @@
 import type { IExecuteFunctions } from 'n8n-workflow';
+import { apiRequest } from './client';
 import { pollUntil } from './poll';
 import type { PublishResult, CarouselItem } from './types';
 
@@ -296,10 +297,7 @@ export const OPS = {
 			});
 
 			const code = (st?.status_code ?? 'UNKNOWN') as
-				| 'IN_PROGRESS'
-				| 'FINISHED'
-				| 'ERROR'
-				| 'UNKNOWN';
+				'IN_PROGRESS' | 'FINISHED' | 'ERROR' | 'UNKNOWN';
 
 			childStatuses[childId] = code;
 
@@ -347,6 +345,21 @@ export const OPS = {
 			publishResult: pub,
 			permalink,
 		};
+	},
+
+	/**
+	 * Refreshes an Instagram long-lived access token.
+	 */
+	async refreshIgToken(ctx: IExecuteFunctions, i: number) {
+		const res = await apiRequest(
+			ctx,
+			'GET',
+			'https://graph.instagram.com/refresh_access_token',
+			{ grant_type: 'ig_refresh_token' },
+			{},
+			i,
+		);
+		return res;
 	},
 
 	/* ===================== Facebook Pages ===================== */
@@ -780,5 +793,20 @@ export const OPS = {
 			publishResult: pub,
 			permalink,
 		};
+	},
+
+	/**
+	 * Refreshes a Threads long-lived access token.
+	 */
+	async refreshThToken(ctx: IExecuteFunctions, i: number) {
+		const res = await apiRequest(
+			ctx,
+			'GET',
+			'https://graph.threads.net/v1.0/refresh_access_token',
+			{ grant_type: 'th_refresh_token' },
+			{},
+			i,
+		);
+		return res;
 	},
 } as const;

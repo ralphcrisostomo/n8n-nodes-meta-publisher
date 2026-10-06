@@ -21,6 +21,8 @@ import {
 	PUBLISH_REEL,
 	PUBLISH_STORY,
 	PUBLISH_VIDEO,
+	REFRESH_IG_TOKEN,
+	REFRESH_TH_TOKEN,
 	THREADS_PUBLISH_CAROUSEL,
 	THREADS_PUBLISH_IMAGE,
 	THREADS_PUBLISH_TEXT,
@@ -114,6 +116,11 @@ export class MetaPublisher implements INodeType {
 						value: PUBLISH_VIDEO,
 						action: 'Publish video on instagram',
 					},
+					{
+						name: 'Refresh Access Token (IG)',
+						value: REFRESH_IG_TOKEN,
+						action: 'Refresh an instagram long lived access token',
+					},
 				],
 				displayOptions: { show: { inputSource: ['fields'], resource: ['instagram'] } },
 			},
@@ -183,6 +190,11 @@ export class MetaPublisher implements INodeType {
 						name: 'Publish Carousel (Threads)',
 						value: THREADS_PUBLISH_CAROUSEL,
 						action: 'Publish carousel on threads',
+					},
+					{
+						name: 'Refresh Access Token (Threads)',
+						value: REFRESH_TH_TOKEN,
+						action: 'Refresh a threads long lived access token',
 					},
 				],
 				displayOptions: { show: { inputSource: ['fields'], resource: ['threads'] } },
@@ -833,6 +845,9 @@ export class MetaPublisher implements INodeType {
 								autoPublish,
 							});
 						}
+						case REFRESH_IG_TOKEN: {
+							return OPS.refreshIgToken(this, i);
+						}
 						default:
 							throw opErr(i, `Unsupported IG operation in payload: ${operation}`);
 					}
@@ -954,6 +969,9 @@ export class MetaPublisher implements INodeType {
 								maxWaitSec,
 							});
 						}
+						case REFRESH_TH_TOKEN: {
+							return OPS.refreshThToken(this, i);
+						}
 						default:
 							throw opErr(i, `Unsupported Threads operation in payload: ${operation}`);
 					}
@@ -992,9 +1010,7 @@ export class MetaPublisher implements INodeType {
 				} else {
 					// regular field mode → build a "job" from node params and run once
 					const resource = this.getNodeParameter('resource', i) as
-						| 'instagram'
-						| 'facebook'
-						| 'threads';
+						'instagram' | 'facebook' | 'threads';
 					const operation = this.getNodeParameter('operation', i) as string;
 					const job = { resource, operation }; // runJob will pull any missing fields from node params
 					const result = await runJob(i, job);
