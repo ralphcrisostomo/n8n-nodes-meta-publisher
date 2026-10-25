@@ -60,6 +60,7 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 - Publish Reel (thumb offset, share to feed)
 - Publish Story (image/video)
 - Publish Carousel (2–10 items)
+- Refresh Access Token
 
 **Facebook Pages**
 
@@ -75,6 +76,7 @@ Publish to **Instagram**, **Facebook Pages**, and **Threads** from n8n — inclu
 - Publish Image (optional alt text)
 - Publish Video (optional alt text)
 - Publish Carousel (2–20 items)
+- Refresh Access Token
 
 ---
 
@@ -151,7 +153,7 @@ Each job must be an object with at least:
 
 All Instagram jobs require:
 
-- `igUserId` – Instagram Business User ID
+- `igUserId` – Instagram Business User ID (not required for Refresh Access Token)
 - `autoPublish` _(default: true)_
 
 Operations:
@@ -161,6 +163,7 @@ Operations:
 - `publishReel` → `videoUrl`, `caption?`, `thumbOffsetMs?`, `shareToFeed?`
 - `publishStory` → `mediaUrl`, `storyKind` (`"image"` | `"video"`), `caption?`
 - `publishCarousel` → `items[]` (`{ type: "image|video", url: "..." }`), `caption?`
+- `refreshIgToken` → (no extra fields required)
 
 #### Instagram User Tags
 
@@ -197,7 +200,7 @@ Operations:
 
 All Threads jobs require:
 
-- `thUserId` (or `userId` alias) – Threads User ID
+- `thUserId` (or `userId` alias) – Threads User ID (not required for Refresh Access Token)
 
 Operations:
 
@@ -205,6 +208,7 @@ Operations:
 - `threadsPublishImage` → `imageUrl`, `text?`, `altText?`
 - `threadsPublishVideo` → `videoUrl`, `text?`, `altText?`
 - `threadsPublishCarousel` → `items[]` (`{ type: "image|video", url: "...", altText? }`), `text?`
+- `refreshThToken` → (no extra fields required)
 
 You can also pass **an array of jobs** to publish multiple posts in one execution.
 
@@ -356,6 +360,14 @@ You can also pass **an array of jobs** to publish multiple posts in one executio
 			}
 		],
 		"text": "This is an example caption."
+	},
+	{
+		"resource": "instagram",
+		"operation": "refreshIgToken"
+	},
+	{
+		"resource": "threads",
+		"operation": "refreshThToken"
 	}
 ]
 ```

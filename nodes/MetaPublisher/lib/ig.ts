@@ -7,61 +7,61 @@ export type IgStatus = { status_code?: IgStatusCode };
 
 export type IgCreateArgs =
 	| {
-	kind: 'IMAGE';
-	igUserId: string;
-	url: string;
-	caption?: string;
-	userTags?: { username: string; x: number; y: number }[];
-}
+			kind: 'IMAGE';
+			igUserId: string;
+			url: string;
+			caption?: string;
+			userTags?: { username: string; x: number; y: number }[];
+	  }
 	| {
-	kind: 'VIDEO';
-	igUserId: string;
-	url: string;
-	caption?: string;
-	coverUrl?: string;
-	userTags?: { username: string; x: number; y: number }[];
-}
+			kind: 'VIDEO';
+			igUserId: string;
+			url: string;
+			caption?: string;
+			coverUrl?: string;
+			userTags?: { username: string; x: number; y: number }[];
+	  }
 	| {
-	kind: 'REELS';
-	igUserId: string;
-	url: string;
-	caption?: string;
-	thumbOffsetMs?: number;
-	shareToFeed?: boolean;
-	userTags?: { username: string; x: number; y: number }[];
-}
+			kind: 'REELS';
+			igUserId: string;
+			url: string;
+			caption?: string;
+			thumbOffsetMs?: number;
+			shareToFeed?: boolean;
+			userTags?: { username: string; x: number; y: number }[];
+	  }
 	| {
-	kind: 'STORY_IMAGE';
-	igUserId: string;
-	url: string;
-	caption?: string;
-}
+			kind: 'STORY_IMAGE';
+			igUserId: string;
+			url: string;
+			caption?: string;
+	  }
 	| {
-	kind: 'STORY_VIDEO';
-	igUserId: string;
-	url: string;
-	caption?: string;
-}
+			kind: 'STORY_VIDEO';
+			igUserId: string;
+			url: string;
+			caption?: string;
+	  }
 	| {
-	kind: 'CAROUSEL_PARENT';
-	igUserId: string;
-	children: string[];
-	caption?: string;
-}
+			kind: 'CAROUSEL_PARENT';
+			igUserId: string;
+			children: string[];
+			caption?: string;
+	  }
 	| {
-	kind: 'CAROUSEL_CHILD_IMAGE';
-	igUserId: string;
-	url: string;
-	caption?: string;
-	userTags?: { username: string; x: number; y: number }[];
-}
+			kind: 'CAROUSEL_CHILD_IMAGE';
+			igUserId: string;
+			url: string;
+			caption?: string;
+			userTags?: { username: string; x: number; y: number }[];
+	  }
 	| {
-	kind: 'CAROUSEL_CHILD_VIDEO';
-	igUserId: string;
-	url: string;
-	caption?: string;
-	userTags?: { username: string; x: number; y: number }[];
-};
+			kind: 'CAROUSEL_CHILD_VIDEO';
+			igUserId: string;
+			url: string;
+			caption?: string;
+			userTags?: { username: string; x: number; y: number }[];
+	  };
 
 export async function igCreateContainer(ctx: IExecuteFunctions, i: number, a: IgCreateArgs) {
 	const base = async (body: Record<string, any>) => {
